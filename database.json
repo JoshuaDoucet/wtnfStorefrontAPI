@@ -1,0 +1,17 @@
+{
+    "dev": {
+      "driver": "pg",
+      "host": "0.0.0.0",
+      "database": "wtnf_storefront",
+      "user": "wtnf_admin",
+      "password": "getYourGoodsHere2022"
+    },
+    "test": {
+        "driver": "pg",
+        "host": "0.0.0.0",
+        "database": "wtnf_storefront_test",
+        "user": "wtnf_admin",
+        "password": "getYourGoodsHere2022"
+      }
+  }
+  

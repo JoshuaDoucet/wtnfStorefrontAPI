@@ -1,0 +1,25 @@
+                     List of relations
+ Schema |           Name           |   Type   |   Owner    
+--------+--------------------------+----------+------------
+ public | colors                   | table    | wtnf_admin
+ public | colors_id_seq            | sequence | wtnf_admin
+ public | locations                | table    | wtnf_admin
+ public | locations_id_seq         | sequence | wtnf_admin
+ public | materials                | table    | wtnf_admin
+ public | materials_id_seq         | sequence | wtnf_admin
+ public | migrations               | table    | wtnf_admin
+ public | migrations_id_seq        | sequence | wtnf_admin
+ public | order_products           | table    | wtnf_admin
+ public | order_products_id_seq    | sequence | wtnf_admin
+ public | orders                   | table    | wtnf_admin
+ public | orders_id_seq            | sequence | wtnf_admin
+ public | product_colors           | table    | wtnf_admin
+ public | product_colors_id_seq    | sequence | wtnf_admin
+ public | product_materials        | table    | wtnf_admin
+ public | product_materials_id_seq | sequence | wtnf_admin
+ public | products                 | table    | wtnf_admin
+ public | products_id_seq          | sequence | wtnf_admin
+ public | users                    | table    | wtnf_admin
+ public | users_id_seq             | sequence | wtnf_admin
+(20 rows)
+
