@@ -1,7 +1,7 @@
 
-DROP TABLE product_materials;
-DROP TABLE product_colors;
-DROP TABLE order_products;
+DROP TABLE IF EXISTS product_materials CASCADE;
+DROP TABLE IF EXISTS product_colors CASCADE;
+DROP TABLE IF EXISTS order_products CASCADE;
 DROP TABLE materials;
 DROP TABLE products;
 DROP TABLE orders;
