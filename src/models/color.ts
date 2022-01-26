@@ -58,7 +58,7 @@ export class ColorStore {
     // DELETE a color row
     async delete(id: string): Promise<Color> {
         try {
-        const sql = 'DELETE FROM colors WHERE id=($1)'
+            const sql = 'DELETE FROM colors WHERE id=($1)'
             const conn = await Client.connect()
             const result = await conn.query(sql, [id])
             const delColor = result.rows[0]

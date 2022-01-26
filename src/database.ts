@@ -8,18 +8,35 @@ dotenv.config();
 
 // get DB info from .env file
 const {
+    ENV,
     POSTGRES_HOST,
     POSTGRES_DB,
+    POSTGRES_TEST_DB,
     POSTGRES_USER,
-    POSTGRES_PASSWORD
+    POSTGRES_PASSWORD,
 } = process.env;
 
-// create a connection to the production DB
-const client = new Pool({
-    host: POSTGRES_HOST,
-    database: POSTGRES_DB,
-    user: POSTGRES_USER,
-    password: POSTGRES_PASSWORD
-});
+let client: Pool;
+
+console.log(`ENV = ${ENV}`)
+
+// create a connection to the test DB
+if(ENV === 'test'){
+    client = new Pool({
+        host: POSTGRES_HOST,
+        database: POSTGRES_TEST_DB,
+        user: POSTGRES_USER,
+        password: POSTGRES_PASSWORD
+    });
+}
+// create a connection to the developmnent DB
+else{
+    client = new Pool({
+        host: POSTGRES_HOST,
+        database: POSTGRES_DB,
+        user: POSTGRES_USER,
+        password: POSTGRES_PASSWORD
+    });
+}
 
 export default client;
