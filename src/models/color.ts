@@ -45,10 +45,10 @@ export class ColorStore {
     async create(color: Color): Promise<Color> {
         try {
             const sql = 'INSERT INTO colors (name, red, green, blue, hex) VALUES($1, $2, $3, $4, $5) RETURNING *';
-            const conn = await Client.connect()
-            const result = await conn.query(sql, [color.name, color.red, color.green, color.blue, color.hex]);
+            const connect = await Client.connect()
+            const result = await connect.query(sql, [color.name, color.red, color.green, color.blue, color.hex]);
             const addedColor = result.rows[0]
-            conn.release()
+            connect.release()
             return addedColor 
         } catch (error) {
             throw new Error(`Could not add color ${color.name}. Error: ${error}`)
@@ -58,14 +58,28 @@ export class ColorStore {
     // DELETE a color row
     async delete(id: string): Promise<Color> {
         try {
-            const sql = 'DELETE FROM colors WHERE id=($1)'
-            const conn = await Client.connect()
-            const result = await conn.query(sql, [id])
+            const sql = 'DELETE FROM colors WHERE id=($1) RETURNING *'
+            const connect = await Client.connect()
+            const result = await connect.query(sql, [id])
             const delColor = result.rows[0]
-            conn.release()
+            connect.release()
             return delColor  
         } catch (err) {
             throw new Error(`Could not delete color ID ${id}. Error: ${err}`)
+        }
+    }
+
+    // DELETE all rows
+    async deleteAll(): Promise<Color[]> {
+        try {
+            const sql = 'DELETE FROM colors RETURNING *';
+            const connect = await Client.connect()
+            const result = await connect.query(sql)
+            const delColors = result.rows
+            connect.release()
+            return delColors  
+        } catch (err) {
+            throw new Error(`Could not delete colors. Error: ${err}`)
         }
     }
 }

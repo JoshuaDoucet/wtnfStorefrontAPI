@@ -1,3 +1,7 @@
+// color.ts
+
+// handler for color 
+
 import express, { Request, Response } from 'express'
 import { Color, ColorStore } from '../models/color'
 
@@ -5,14 +9,29 @@ const store = new ColorStore();
 
 // /colors [GET]
 const index = async (_req: Request, res: Response) => {
-  const colors = await store.index()
-  res.json(colors);
+    try{
+        const colors = await store.index()
+        res.json(colors);
+    }catch(err){
+        res.status(503);
+        res.json(`Cannot GET colors index. ERR -- ${err}`);
+    }
 }
 
 // /colors/:id [GET] 
 const show = async (req: Request, res: Response) => {
-   const color = await store.show(req.body.id);
-   res.json(color);
+    try{
+        const color = await store.show(req.params.id);
+        if(color){
+            res.json(color);
+        }else{
+            res.status(404);
+            res.json(`Cannot GET color with id ${req.params.id}`)
+        }
+    }catch(err){
+        res.status(503)
+        res.json(`Cannot GET color with id ${req.params.id} ERR -- ${err}`)
+    }
 }
 
 // /colors [PUT]
@@ -32,14 +51,24 @@ const create = async (req: Request, res: Response) => {
         res.json(newColor);
     } catch(error) {
         res.status(400);
-        res.json(`Color name [${colorName}] not added. -- ${error}`);
+        res.json(`Color name [${colorName}] not added. ERR -- ${error}`);
     }
 }
 
 // /colors/:id [DELETE]
 const destroy = async (req: Request, res: Response) => {
-    const deletedColor = await store.delete(req.body.id);
-    res.json(deletedColor);
+    try{
+        const deletedColor = await store.delete(req.params.id);
+        if(deletedColor){
+            res.json(deletedColor);
+        }else{
+            res.status(404);
+            res.json(`Cannot DELETE color with id ${req.params.id}`)
+        }        
+    }catch(err) {
+        res.status(400);
+        res.json(`Color id [${req.params.id}] not deleted. ERR -- ${err}`);
+    }
 }
 
 // Routes to connect the Express application to colors data
@@ -47,7 +76,7 @@ const colorRoutes = (app: express.Application) => {
   app.get('/colors', index)
   app.get('/colors/:id', show)
   app.post('/colors', create)
-  app.delete('/colors', destroy)
+  app.delete('/colors/:id', destroy)
 }
 
 export default colorRoutes;

@@ -18,8 +18,6 @@ const {
 
 let client: Pool;
 
-console.log(`ENV = ${ENV}`)
-
 // create a connection to the test DB
 if(ENV === 'test'){
     client = new Pool({

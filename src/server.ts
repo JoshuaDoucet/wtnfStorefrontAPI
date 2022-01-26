@@ -2,7 +2,8 @@ import express, { Request, Response } from 'express'
 import bodyParser from 'body-parser'
 
 //Route functions
-import colorRoutes from './handlers/color'
+import colorRoutes from './handlers/colors'
+import materialRoutes from './handlers/materials'
 
 const app: express.Application = express()
 const address: string = "0.0.0.0:3000"
@@ -15,6 +16,7 @@ app.get('/', function (req: Request, res: Response) {
 
 // Connect color routes to Express application
 colorRoutes(app);
+materialRoutes(app);
 
 app.listen(3000, function () {
     console.log(`starting app on: ${address}`)
