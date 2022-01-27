@@ -47,7 +47,7 @@ export class MaterialStore {
             connect.release()
             return addedMaterial 
         } catch (error) {
-            throw new Error(`Could not add color ${material.name}. Error: ${error}`)
+            throw new Error(`Could not add material ${material.name}. Error: ${error}`)
         }
     }
 

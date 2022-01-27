@@ -4,19 +4,14 @@ const colorStore = new ColorStore();
 
 const blueColor: Color = {name: "Blue", blue: 255, hex: "0000FF"};
 
-// remove all colors from table before any test
-beforeEach(function() {
-    colorStore.deleteAll();
-});
-
 describe('Color model tests', () => {
     // READ tests
     it('Should have an index method', () => {
         expect(colorStore.index).toBeDefined();
     });
-    it('index should return a list of colors', async () => {
+    it('index should return a list of 1 color', async () => {
         const result = await colorStore.index();
-        expect(result).toEqual([]);
+        expect(result.length).toEqual(1);
     });
     it('Should have an show method', () => {
         expect(colorStore.show).toBeDefined();

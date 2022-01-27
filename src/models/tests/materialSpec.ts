@@ -4,19 +4,14 @@ const materialStore = new MaterialStore();
 
 const leatherMat: Material = {name: "Brown leather"};
 
-// remove all materials from table before any test
-beforeEach(function() {
-    materialStore.deleteAll();
-});
-
 describe('Material model tests', () => {
     // READ tests
     it('Should have an index method', () => {
         expect(materialStore.index).toBeDefined();
     });
-    it('index should return a list of materials', async () => {
+    it('index should return a list with 1 material', async () => {
         const result = await materialStore.index();
-        expect(result).toEqual([]);
+        expect(result.length).toEqual(1);
     });
     it('Should have an show method', () => {
         expect(materialStore.show).toBeDefined();
