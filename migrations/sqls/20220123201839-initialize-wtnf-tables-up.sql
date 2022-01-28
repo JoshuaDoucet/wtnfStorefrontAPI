@@ -1,10 +1,11 @@
 CREATE TABLE locations (
      id SERIAL PRIMARY KEY,
+     name VARCHAR,
      street_addr_1 VARCHAR,
      street_addr_2 VARCHAR,
      city VARCHAR,
      state VARCHAR,
-     zip INTEGER NOT NULL,
+     zip INTEGER,
      country VARCHAR,
      lat NUMERIC,
      long NUMERIC,
