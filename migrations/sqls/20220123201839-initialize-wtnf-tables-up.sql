@@ -50,7 +50,7 @@ CREATE TABLE products (
       sku VARCHAR(100), 
       size_family VARCHAR(64),
       size VARCHAR(64), 
-      branch VARCHAR(100),
+      brand VARCHAR(100),
       condition VARCHAR, 
       instructions TEXT,
       country_origin VARCHAR(100), 
