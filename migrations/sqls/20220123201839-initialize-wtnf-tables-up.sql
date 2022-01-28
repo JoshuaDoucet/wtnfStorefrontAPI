@@ -40,9 +40,10 @@ CREATE TABLE orders (
 CREATE TABLE products (
       id SERIAL PRIMARY KEY, 
       name VARCHAR NOT NULL, 
-      price NUMERIC, 
+      price NUMERIC NOT NULL,
+      cost NUMERIC, 
       boh INTEGER,
-      for_sale BOOLEAN,
+      for_sale BOOLEAN NOT NULL,
       category VARCHAR,
       description TEXT, 
       measurments VARCHAR, 
@@ -56,7 +57,7 @@ CREATE TABLE products (
       country_origin VARCHAR(100), 
       rn_num VARCHAR(20), 
       weight_grams REAL,
-      location BIGINT REFERENCES locations(id)
+      location_id BIGINT REFERENCES locations(id)
 );
 
 CREATE TABLE materials (
@@ -82,6 +83,3 @@ CREATE TABLE product_materials (
      product_id BIGINT REFERENCES products(id),
      materials_id BIGINT REFERENCES materials(id)
 );
-
-ALTER TABLE products ADD CONSTRAINT colors FOREIGN KEY(id) REFERENCES product_materials(id);
-ALTER TABLE products ADD CONSTRAINT materials FOREIGN KEY(id) REFERENCES product_colors(id);
