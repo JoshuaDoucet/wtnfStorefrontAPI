@@ -28,12 +28,12 @@ CREATE TABLE users (
      password_hash VARCHAR NOT NULL,
      phone BIGINT, 
      email TEXT, 
-     location BIGINT REFERENCES locations(id)
+     location BIGINT REFERENCES locations(id) ON DELETE CASCADE
 );
 
 CREATE TABLE orders (
       id SERIAL PRIMARY KEY,
-      user_id BIGINT REFERENCES users(id),
+      user_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
       status VARCHAR(32) NOT NULL
 );
 
@@ -67,19 +67,19 @@ CREATE TABLE materials (
 
 CREATE TABLE order_products (
      id SERIAL PRIMARY KEY,
-     order_id BIGINT REFERENCES orders(id),
-     product_id BIGINT REFERENCES products(id),
+     order_id BIGINT REFERENCES orders(id) ON DELETE CASCADE,
+     product_id BIGINT REFERENCES products(id) ON DELETE CASCADE,
      product_quantity INTEGER NOT NULL
 );
 
 CREATE TABLE product_colors (
      id SERIAL PRIMARY KEY,
-     product_id BIGINT REFERENCES products(id),
-     color_id BIGINT REFERENCES colors(id)
+     product_id BIGINT REFERENCES products(id) ON DELETE CASCADE,
+     color_id BIGINT REFERENCES colors(id) ON DELETE CASCADE
 );
 
 CREATE TABLE product_materials (
      id SERIAL PRIMARY KEY,
-     product_id BIGINT REFERENCES products(id),
-     materials_id BIGINT REFERENCES materials(id)
+     product_id BIGINT REFERENCES products(id) ON DELETE CASCADE,
+     materials_id BIGINT REFERENCES materials(id) ON DELETE CASCADE
 );

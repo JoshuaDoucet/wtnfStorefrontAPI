@@ -10,7 +10,7 @@ export type Color = {
     red?: number,
     green?: number,
     blue?: number,
-    hex: string
+    hex?: string
 };
 
 // Class to interact with the colors database table

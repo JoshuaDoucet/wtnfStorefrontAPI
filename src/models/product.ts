@@ -40,11 +40,17 @@ export class ProductStore {
             const sql = "SELECT * FROM products";
             const result = await connect.query(sql);
             connect.release();
-            var products = result.rows;
-            // add color ids to produxt JSON
+            // add color_ids and materials_ids to Product objects
+            var products: Product[] = result.rows;
             for(var i = 0; i < products.length; i++){
-                products[i].color_ids = this.getColors(products[i].id);
+                if(products[i].id){
+                    products[i].color_ids = await 
+                        this.getColors((products[i].id as unknown) as string);
+                    products[i].material_ids = await 
+                        this.getMaterials((products[i].id as unknown) as string);
+                }
             }
+
             return products;
         }catch(err){
             throw new Error(`Could not get products. ERR ${err}`);
@@ -88,27 +94,28 @@ export class ProductStore {
                     product.rn_num, product.weight_grams, product.location_id
                 ]
             );
+            connect.release()
+
             let addedProduct = result.rows[0]
             const productId = addedProduct.id;
             
             // link color IDs to product
             if(product.color_ids){
-                for(var i = 0; i < product.color_ids.length; i++)
-                for(const colorId in product.color_ids){
-                    this.addColor(product.color_ids[i], productId);
+                for(var i = 0; i <= product.color_ids.length; i++){
+                    await this.addColor(product.color_ids[i], productId);
                 }
             }
+
             // link material IDs to product
             if(product.material_ids){
-                for(var i = 0; i < product.material_ids.length; i++)
-                for(const colorId in product.material_ids){
-                    this.addColor(product.material_ids[i], productId);
+                for(var i = 0; i <= product.material_ids.length; i++){
+                    await this.addMaterial(product.material_ids[i], productId);
                 }
             }
-            connect.release()
 
             // ensure colors and materials were correctly related to product
             addedProduct.color_ids = await this.getColors(productId);
+            addedProduct.material_ids = await this.getMaterials(productId);
 
             return addedProduct 
         } catch (error) {
@@ -151,6 +158,22 @@ export class ProductStore {
             throw new Error(`Could not delete products. Error: ${err}`)
         }
     }
+
+    // get product material IDs
+    async getMaterials(productId: string):Promise<string[]> {
+        const sql = 'SELECT materials.id, name FROM materials '
+            + 'INNER JOIN product_materials ON product_materials.product_id=($1) '
+            + 'AND product_materials.materials_id=materials.id';
+        const conn = await Client.connect()
+        const result = await conn
+            .query(sql, [productId])
+        // TODO    
+        const materialIds = result.rows
+        conn.release()
+        return materialIds
+    }
+
+
     // addMaterial to product
     async addMaterial(materialId: string, productId: string): Promise<Product> {
         try {
@@ -183,13 +206,13 @@ export class ProductStore {
 
     // get product color IDs
     async getColors(productId: string):Promise<string[]> {
-       //const sql = "SELECT * FROM product_colors WHERE product_id=($1)";
-       // const sql = "SELECT * FROM colors INNER JOIN product_colors ON product_colors.product_id=($1)";
-        const sql = "SELECT color_id FROM product_colors WHERE product_id=($1)";
+        const sql = 'SELECT colors.id, name FROM colors '
+            + 'INNER JOIN product_colors ON product_colors.product_id=($1) '
+            + 'AND product_colors.color_id=colors.id';
         const conn = await Client.connect()
         const result = await conn
             .query(sql, [productId])
-        console.log(result)
+        // TODO    
         const colorIds = result.rows
         conn.release()
         return colorIds

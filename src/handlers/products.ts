@@ -99,6 +99,18 @@ const addColor = async (_req: Request, res: Response) => {
     }
 } 
   
+// /products/:id/materials GET
+const getMaterials = async (_req: Request, res: Response) => {
+    const productId: string = _req.params.id
+    try {
+        const colors = await store.getMaterials(productId)
+        res.json(colors)
+    } catch(err) {
+        res.status(400);
+        res.json("Cannot get materials for product. ERR -- " + err);
+    }
+} 
+
 // /products/:id/materials POST
 const addMaterial = async (_req: Request, res: Response) => {
     const productId: string = _req.params.id
@@ -133,6 +145,7 @@ const productRoutes = (app: express.Application) => {
   app.get('/products', index)
   app.get('/products/:id', show)
   app.get('/products/:id/colors', getColors)
+  app.get('/products/:id/materials', getMaterials)
   app.post('/products', create)
   app.post('/products/:id/colors', addColor)
   app.post('/products/:id/materials', addMaterial)
