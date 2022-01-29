@@ -65,7 +65,9 @@ export class ProductStore {
             const result = await connect.query(sql, [id]);
             connect.release();
             var product = result.rows[0];
-            product.color_ids = this.getColors(id);
+            
+            product.color_ids = await this.getColors(id);
+            product.material_ids = await this.getMaterials(id);
 
             return result.rows[0]; //should be 1 location returned
         }catch(err){

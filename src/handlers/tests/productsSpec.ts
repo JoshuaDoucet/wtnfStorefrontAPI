@@ -58,13 +58,17 @@ let product: Product;
 let location: Location;
 let redColId: string | undefined
 let redColor2: Color;
-let material: Material;
+let velvetMat: Material;
+let velMatId: string | undefined;
 
 // remove all products from table before any test and add 1 product
 beforeEach(async function(){
     redColor2 = await colorStore.create(redColor);
     redColId = redColor2.id;
     coat.color_ids = [`${redColId}`]
+
+    velvetMat = await materialStore.create(velvet);
+    velMatId = velvetMat.id;
 
     await productStore.deleteAll();
     product = await productStore.create(coat);
@@ -111,6 +115,26 @@ describe('Test products endpoint responses', () => {
   app.post('/products/:id/colors', addColor)
   app.post('/products/:id/materials', addMaterial)
     */
+    it('addColor: POST /products/:id/colors', async(done) => {
+        const response = await request
+            .post(`/products/${prodId}/colors`)
+            .send({color_id: redColId})
+        expect(response.status).toBe(200)
+        expect(response.body.color_id).toEqual(redColId+'')
+        expect(response.body.product_id).toEqual(prodId+'')
+        done();
+    })
+    
+    it('addMaterial: POST /products/:id/materials', async(done) => {
+        const response = await request
+            .post(`/products/${prodId}/materials`)
+            .send({material_id: velMatId})
+        expect(response.status).toBe(200)
+        expect(response.body.materials_id).toEqual(velMatId+'')
+        expect(response.body.product_id).toEqual(prodId+'')
+        done();
+    })
+
     it(`getColors: GET /products/:id/colors`, async(done) => {   
         const response = await request
             .get(`/products/${prodId}/colors`)

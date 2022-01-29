@@ -11,7 +11,7 @@ describe('Material model tests', () => {
     });
     it('index should return a list with 1 material', async () => {
         const result = await materialStore.index();
-        expect(result.length).toEqual(1);
+        expect(result.length).toEqual(2);
     });
     it('Should have an show method', () => {
         expect(materialStore.show).toBeDefined();

@@ -34,7 +34,7 @@ const show = async (req: Request, res: Response) => {
     }
 }
 
-// /materials [PUT]
+// /materials [POST]
 const create = async (req: Request, res: Response) => {
     var matName: string | undefined;
     try {
