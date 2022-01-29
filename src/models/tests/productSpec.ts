@@ -10,22 +10,7 @@ import {ColorStore, Color} from '../color'
 import objectNullValsToUndefined from '../../utilities/utilities'
 
 const productStore = new ProductStore();
-const locationStore = new LocationStore();
 const colorStore = new ColorStore();
-const materialStore = new MaterialStore();
-
-const home: Location = {
-    name: "Home",
-    zip: 80921
-}
-
-const greenColor: Color = {
-    name: "Green"
-}
-
-const silkMaterial: Material = {
-    name: "Silk"
-}
 
 var jacket: Product = {
     name: "Columbia Blue/Gray Winter Jacket, Mens, XL",
@@ -46,8 +31,26 @@ var jacket: Product = {
     country_origin: "Thailand",
     rn_num: "101654",
     weight_grams: 978,
+    color_ids: ["1"]
 };
 
+var orangeColor: Color = {
+    name: "Orange"
+}
+var orangeId: string;
+var orange: Color;
+
+beforeEach(async function() {
+    orangeColor = await colorStore.create(orangeColor);
+    if(orangeColor.id && jacket.color_ids){
+        orangeId = orangeColor.id;
+        jacket.color_ids[0] = orangeId
+    }
+})
+
+afterEach(async function() {
+   // await colorStore.delete(orangeId)
+})
 
 describe('Product model tests', () => {
     // READ tests
@@ -68,10 +71,8 @@ describe('Product model tests', () => {
     });
     it('Should add sample product to the products table', async () => {
         const createResult = await productStore.create(jacket);
-
         // create a copy of result to change null values to undefined 
         const copyResult = (objectNullValsToUndefined(createResult) as Product);
-
         // check to see if correct product details were added to new row
         expect(copyResult.name).toEqual(jacket.name);
         expect(copyResult.price+'').toEqual(jacket.price+'');

@@ -36,7 +36,7 @@ const show = async (req: Request, res: Response) => {
     }
 }
 
-// /products [PUT]
+// /products [POST]
 const create = async (req: Request, res: Response) => {
     var prodName: string | undefined;
     try {

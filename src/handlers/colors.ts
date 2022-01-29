@@ -34,7 +34,7 @@ const show = async (req: Request, res: Response) => {
     }
 }
 
-// /colors [PUT]
+// /colors [POST]
 const create = async (req: Request, res: Response) => {
     var colorName: string | undefined;
     try {

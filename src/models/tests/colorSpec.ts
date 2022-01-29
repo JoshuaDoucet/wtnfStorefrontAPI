@@ -9,9 +9,9 @@ describe('Color model tests', () => {
     it('Should have an index method', () => {
         expect(colorStore.index).toBeDefined();
     });
-    it('index should return a list of 1 color', async () => {
+    it('index should return a list of 3 color', async () => {
         const result = await colorStore.index();
-        expect(result.length).toEqual(1);
+        expect(result.length).toEqual(3);
     });
     it('Should have an show method', () => {
         expect(colorStore.show).toBeDefined();

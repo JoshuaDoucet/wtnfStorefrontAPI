@@ -21,13 +21,14 @@ CREATE TABLE colors (
      hex VARCHAR(7)
 );
 
+
 CREATE TABLE users (
      id SERIAL PRIMARY KEY, 
      first_name VARCHAR NOT NULL, 
      last_name VARCHAR NOT NULL, 
      password_hash VARCHAR NOT NULL,
      phone BIGINT, 
-     email TEXT, 
+     email TEXT NOT NULL, 
      location BIGINT REFERENCES locations(id) ON DELETE CASCADE
 );
 

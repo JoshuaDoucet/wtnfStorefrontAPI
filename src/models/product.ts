@@ -76,13 +76,13 @@ export class ProductStore {
     // CREATE a product row
     async create(product: Product): Promise<Product> {
         try {
-
             const sql = 'INSERT INTO products (name, price, cost, boh, for_sale, ' 
                 + 'category, description, measurments, owner, sku, size_family, '
                 + 'size, brand, condition, instructions, country_origin, rn_num, '
                 + 'weight_grams, location_id) '
                 + 'VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, '
-                + '$11, $12, $13, $14, $15, $16, $17, $18, $19) RETURNING *';
+                + '$11, $12, $13, $14, $15, $16, $17, $18, '
+                + '(SELECT id from locations WHERE id=$19)) RETURNING *';
             const connect = await Client.connect()
             const result = await connect.query(sql, 
                 [
@@ -101,7 +101,7 @@ export class ProductStore {
             
             // link color IDs to product
             if(product.color_ids){
-                for(var i = 0; i <= product.color_ids.length; i++){
+                for(var i = 0; i < product.color_ids.length; i++){
                     await this.addColor(product.color_ids[i], productId);
                 }
             }
@@ -114,9 +114,9 @@ export class ProductStore {
             }
 
             // ensure colors and materials were correctly related to product
-            addedProduct.color_ids = await this.getColors(productId);
+            const color_ids = await this.getColors(productId);
+            addedProduct.color_ids = color_ids;
             addedProduct.material_ids = await this.getMaterials(productId);
-
             return addedProduct 
         } catch (error) {
             throw new Error(`Could not add product ${product.name}. Error: ${error}`)
@@ -161,16 +161,16 @@ export class ProductStore {
 
     // get product material IDs
     async getMaterials(productId: string):Promise<string[]> {
-        const sql = 'SELECT materials.id, name FROM materials '
+        const sql = 'SELECT materials.id FROM materials '
             + 'INNER JOIN product_materials ON product_materials.product_id=($1) '
             + 'AND product_materials.materials_id=materials.id';
         const conn = await Client.connect()
         const result = await conn
             .query(sql, [productId])
-        // TODO    
         const materialIds = result.rows
+        const idArray = this.normalizeIdResults(materialIds);
         conn.release()
-        return materialIds
+        return idArray
     }
 
 
@@ -178,7 +178,8 @@ export class ProductStore {
     async addMaterial(materialId: string, productId: string): Promise<Product> {
         try {
             const sql = 'INSERT INTO product_materials (materials_id, product_id) '
-                + 'VALUES($1, $2) RETURNING *';
+                + 'VALUES( (SELECT id FROM materials WHERE id=$1), '
+                + '( SELECT id FROM products WHERE id=$2)) RETURNING *';
             const conn = await Client.connect()
             const result = await conn
                 .query(sql, [materialId, productId])
@@ -206,23 +207,34 @@ export class ProductStore {
 
     // get product color IDs
     async getColors(productId: string):Promise<string[]> {
-        const sql = 'SELECT colors.id, name FROM colors '
+        const sql = 'SELECT colors.id FROM colors '
             + 'INNER JOIN product_colors ON product_colors.product_id=($1) '
             + 'AND product_colors.color_id=colors.id';
         const conn = await Client.connect()
         const result = await conn
             .query(sql, [productId])
-        // TODO    
         const colorIds = result.rows
+        const idArray = this.normalizeIdResults(colorIds);
         conn.release()
-        return colorIds
+        return idArray
+    }
+
+    // remove the id value from a list of rows, and add them to a string[]
+    normalizeIdResults = (rows: {id: number}[]): string[] => {
+        let resultIds: string[] = [];
+        for(let i = 0; i < rows.length; i++){
+            let value = rows[i].id.toString();
+            resultIds.push(value);
+        }
+        return resultIds;
     }
 
     // addColor to product
     async addColor(colorId: string, productId: string): Promise<Product> {
         try {
             const sql = 'INSERT INTO product_colors (color_id, product_id) '
-                + 'VALUES($1, $2) RETURNING *';
+                + 'VALUES( (SELECT id from colors WHERE id=$1), '
+                + ' (SELECT id from products WHERE id=$2) ) RETURNING *';
             const conn = await Client.connect()
             const result = await conn
                 .query(sql, [colorId, productId])
