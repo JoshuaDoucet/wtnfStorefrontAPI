@@ -88,7 +88,7 @@ export class OrderStore {
 
       // get order productIDs
       async getProducts(orderId: string):Promise<string[]> {
-        const sql = 'SELECT products.id, product.name, quantity FROM products '
+        const sql = 'SELECT products.id, products.name, product_quantity FROM products '
             + 'INNER JOIN order_products ON order_products.order_id=($1) ';
         const conn = await Client.connect()
         const result = await conn
@@ -102,13 +102,15 @@ export class OrderStore {
     async addProduct(productId: string, orderId: string, quantity: number): Promise<Order> {
         try {
             const sql = 'INSERT INTO order_products (product_id, order_id, product_quantity) '
-                + 'VALUES( (SELECT id from products WHERE id=$1), '
+                + 'VALUES( (SELECT id FROM products WHERE id=$1), '
                 + ' (SELECT id FROM orders WHERE id=$2), $3 ) RETURNING *';
             const conn = await Client.connect()
             const result = await conn
                 .query(sql, [productId, orderId, quantity])
             const orderProducts = result.rows[0]
             conn.release()
+            console.log("2")
+            console.log(orderProducts)
             return orderProducts
         } catch (err) {
             throw new Error(`Could not add product ${productId} to order ${orderId} ERR -- ${err}`)

@@ -4,8 +4,6 @@
 // Tests for product model
 
 import {ProductStore, Product} from '../product'
-import {LocationStore, Location} from '../location'
-import {MaterialStore, Material} from '../material'
 import {ColorStore, Color} from '../color'
 import objectNullValsToUndefined from '../../utilities/utilities'
 
