@@ -4,6 +4,7 @@ const colorStore = new ColorStore();
 
 const blueColor: Color = {name: "Blue", blue: 255, hex: "0000FF"};
 
+
 describe('Color model tests', () => {
     // READ tests
     it('Should have an index method', () => {

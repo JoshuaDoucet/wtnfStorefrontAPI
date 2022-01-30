@@ -4,40 +4,12 @@
 // Tests for product model
 
 import {ProductStore, Product} from '../product'
+import {LocationStore, Location} from '../location'
 import {ColorStore, Color} from '../color'
+import {MaterialStore, Material} from '../material'
 import utilities from '../../utilities/utilities'
 
-const productStore = new ProductStore();
-const colorStore = new ColorStore();
-
-var jacket: Product = {
-    name: "Columbia Blue/Gray Winter Jacket, Mens, XL",
-    price: 139.95,
-    cost: 89,
-    boh: 1,
-    for_sale: false,
-    category: "Jackets/Winter",
-    description: "A lightly used winter coat. Great in cold",
-    measurments: "Chest: 44 in, Waist: 32 in, Length: 33 in",
-    owner: "JD",
-    sku: "JD/M/TOP/0001",
-    size_family: "MENS",
-    size: "XL",
-    brand: "Columbia",
-    condition: "Used- Like New",
-    instructions: "Machine wash cold. Tumble dry low",
-    country_origin: "Thailand",
-    rn_num: "101654",
-    weight_grams: 978,
-    color_ids: ["1"]
-};
-
-var orangeColor: Color = {
-    name: "Orange"
-}
-var orangeId: string;
-var orange: Color;
-
+/*
 beforeEach(async function() {
     orangeColor = await colorStore.create(orangeColor);
     if(orangeColor.id && jacket.color_ids){
@@ -49,8 +21,100 @@ beforeEach(async function() {
 afterEach(async function() {
    // await colorStore.delete(orangeId)
 })
+*/
 
-describe('Product model tests', () => {
+fdescribe('Product model tests', () => {
+    const productStore = new ProductStore();
+    var jacket: Product = {
+        name: "Columbia Blue/Gray Winter Jacket, Mens, XL",
+        price: 139.95,
+        cost: 89,
+        boh: 1,
+        for_sale: false,
+        category: "Jackets/Winter",
+        description: "A lightly used winter coat. Great in cold",
+        measurments: "Chest: 44 in, Waist: 32 in, Length: 33 in",
+        owner: "JD",
+        sku: "JD/M/TOP/0001",
+        size_family: "MENS",
+        size: "XL",
+        brand: "Columbia",
+        condition: "Used- Like New",
+        instructions: "Machine wash cold. Tumble dry low",
+        country_origin: "Thailand",
+        rn_num: "101654",
+        weight_grams: 978,
+        color_ids: ["1", "2"],
+        material_ids: ["1"],
+        location_id: "1"
+    };
+    var jacketId: string | undefined;
+
+    const colorStore = new ColorStore();
+    var orangeColor: Color = {
+        name: "Orange"
+    }
+    var orangeId: string | undefined;
+    var pinkColor: Color = {
+        name: "Pink"
+    }
+    var pinkId: string | undefined;
+
+    const materialStore = new MaterialStore();
+    var silkMaterial: Material = {
+        name: "Silk"
+    }
+    var materialId: string | undefined;
+
+    const locationStore = new LocationStore();
+    var testLocation: Location = {
+        name: "Test Location",
+        zip: 80922
+    }
+    var locationId : string | undefined;
+    
+    beforeAll(async function () {
+        // Create sample objects that product shou;d relate to
+        
+        // Create location and add its id to test jacket product
+        await locationStore.deleteAll();
+        const location = await locationStore.create(testLocation);
+        locationId = location.id;
+        jacket.location_id = locationId;
+
+        // Create 2 colors and add their ids to test jacket product
+        await colorStore.deleteAll();
+        const color1 = await colorStore.create(orangeColor);
+        orangeId = color1.id;
+        const color2 = await colorStore.create(pinkColor);
+        pinkId = color2.id;
+        if(orangeId && pinkId){
+            jacket.color_ids = [orangeId, pinkId];
+        }
+        
+        // Create material and add its id to test jacket product
+        await materialStore.deleteAll();
+        const material = await materialStore.create(silkMaterial);
+        materialId = material.id;
+        if(materialId)
+            jacket.material_ids = [materialId];
+    });
+
+    afterAll(async function(){
+        // empty all tables that the tests interacted with
+        locationStore.deleteAll();
+        materialStore.deleteAll();
+        colorStore.deleteAll();
+        productStore.deleteAll();
+    });
+
+    beforeEach( async function() {
+        // Delete products and create 1 jacket before each test
+        await productStore.deleteAll();
+        const product = await productStore.create(jacket);
+        jacketId = product.id;
+    });
+
     // READ tests
     it('Should have an index method', () => {
         expect(productStore.index).toBeDefined();
@@ -68,6 +132,7 @@ describe('Product model tests', () => {
         expect(productStore.create).toBeDefined();
     });
     it('Should add sample product to the products table', async () => {
+        await productStore.deleteAll();
         const createResult = await productStore.create(jacket);
         // create a copy of result to change null values to undefined 
         const copyResult = (utilities.objectNullValsToUndefined(createResult) as Product);
@@ -90,6 +155,8 @@ describe('Product model tests', () => {
         expect(copyResult.country_origin).toEqual(jacket.country_origin);
         expect(copyResult.rn_num).toEqual(jacket.rn_num);
         expect(copyResult.weight_grams).toEqual(jacket.weight_grams);
+        expect(copyResult.location_id).toEqual(jacket.location_id+'');
+
         // if test object had a material_ids list, it should return indo about materials_ids
         if(jacket.material_ids){
             if(copyResult.material_ids){
@@ -113,16 +180,13 @@ describe('Product model tests', () => {
         expect(productStore.delete).toBeDefined();
     });
     it("delete should remove a product from the products table", async () => {
-        // create product row
-        const createResult = await productStore.create(jacket);
-        const prodId = createResult.id?.toString();
         // check id is defined for added product
-        if(prodId){
+        if(jacketId){
             // delete product row
-            const delResult = await productStore.delete(prodId.toString());
+            const delResult = await productStore.delete(jacketId.toString());
             // check to see if correct row was deleted
-            expect(delResult.id).toEqual(createResult.id);
-            expect(delResult.name).toEqual(createResult.name);
+            expect(delResult.id).toEqual(jacketId);
+            expect(delResult.name).toEqual(jacket.name);
         }else{
             throw new Error("Invalid product id");
         }

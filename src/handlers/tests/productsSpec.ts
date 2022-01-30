@@ -61,8 +61,10 @@ let redColor2: Color;
 let velvetMat: Material;
 let velMatId: string | undefined;
 
+/*
 // remove all products from table before any test and add 1 product
 beforeEach(async function(){
+    console.log("B4 EACH PRODUCTS")
     redColor2 = await colorStore.create(redColor);
     redColId = redColor2.id;
     coat.color_ids = [`${redColId}`]
@@ -74,6 +76,7 @@ beforeEach(async function(){
     product = await productStore.create(coat);
     prodId = product.id;
 });
+*/
 
 describe('Test products endpoint responses', () => {    
      it('index: GET /products', async(done) => {   

@@ -5,6 +5,7 @@
 import supertest from 'supertest';
 import app from'../../server'; // Where app is an Express server object
 import {Color, ColorStore} from '../../models/color'
+import {User, UserStore} from '../../models/user'
 
 const request = supertest(app); 
 const colorStore = new ColorStore();
@@ -17,15 +18,49 @@ const redColor: Color = {
 let colorID: string | undefined;
 let color: Color;
 
+// for authorization to access endpoints
+const userStore = new UserStore();
+let authUser: User;
+let authUserId: string | undefined;
+let authJWT: string;
+
+/*
 // remove all colors from table before any test and add 1 color
 beforeEach( async function() {
+    console.log("B4 EACH COLORS")
     colorStore.deleteAll();
     color = await colorStore.create(redColor);
     colorID = color.id;
 });
+*/
 
 describe('Test colors endpoint responses', () => {    
-     it('index: GET /colors', async(done) => {   
+    beforeAll(async function(){
+        console.log("BEFORE ALL COLORS")
+        userStore.deleteAll();
+        let testUserA: User = {
+            first_name: "Test",
+            last_name: "User",
+            email: "testuser@bios.com",
+            password_hash: "badPassword"
+        };
+        authUser = await userStore.create(testUserA);
+        authUserId = authUser.id;
+
+        const response = await request
+            .get(`/authenticate`)
+            .send({
+                email: testUserA.email,
+                password: testUserA.password_hash
+            });
+        authJWT = `Bearer ${response.body}`;
+    });
+
+    afterAll(async function(){
+        // TODO
+    })
+
+    it('index: GET /colors', async(done) => {   
         const response = await request.get('/colors');
         expect(response.status).toBe(200);         
         done();     
@@ -41,8 +76,10 @@ describe('Test colors endpoint responses', () => {
     })
 
     it(`create: POST /colors`, async(done) => {   
+        console.log("GLOB 4: " + authJWT)
         const response = await request
             .post(`/colors`)
+            .set('Authorization', authJWT)
             .send(redColor);
         expect(response.status).toBe(200);      
         expect(response.body.name).toEqual(color.name);   

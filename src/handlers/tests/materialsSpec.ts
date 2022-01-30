@@ -13,12 +13,15 @@ const leatherMat: Material = {name: "Leather"};
 let materialID: string | undefined;
 let material: Material;
 
+/*
 // remove all materials from table before any test and add 1 material
 beforeEach( async function() {
+    console.log("B4 EACH MATERIALS")
     materialStore.deleteAll();
     material = await materialStore.create(leatherMat);
     materialID = material.id;
 });
+*/
 
 describe('Test materials endpoint responses', () => {    
      it('index: GET /materials', async(done) => {   

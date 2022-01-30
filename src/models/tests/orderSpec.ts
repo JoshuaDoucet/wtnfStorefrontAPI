@@ -31,11 +31,13 @@ var testOrder: Order = {
 var order: Order;
 var order_id: string;
 
+/*
 beforeEach(async function (){
     order = await orderStore.create(testOrder);
     if(order.id)
         order_id = order.id;
 })
+*/
 
 
 describe('Order model tests', () => {

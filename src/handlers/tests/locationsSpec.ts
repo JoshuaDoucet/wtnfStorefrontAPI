@@ -22,12 +22,15 @@ const sampleLoc: Location = {
 let locId: string | undefined;
 let location: Location;
 
+/*
 // remove all locations from table before any test and add 1 location
 beforeEach( async function() {
+    console.log("B4 EACH LOCATIONS")
     locationStore.deleteAll();
     location = await locationStore.create(sampleLoc);
     locId = location.id;
 });
+*/
 
 describe('Test locations endpoint responses', () => {    
      it('index: GET /locations', async(done) => {   

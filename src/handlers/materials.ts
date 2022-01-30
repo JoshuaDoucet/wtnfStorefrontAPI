@@ -4,6 +4,7 @@
 
 import express, { Request, Response } from 'express'
 import { Material, MaterialStore } from '../models/material'
+import utilities from '../utilities/utilities';
 
 const store = new MaterialStore();
 
@@ -71,8 +72,8 @@ const destroy = async (req: Request, res: Response) => {
 const materialRoutes = (app: express.Application) => {
   app.get('/materials', index)
   app.get('/materials/:id', show)
-  app.post('/materials', create)
-  app.delete('/materials/:id', destroy)
+  app.post('/materials', utilities.verifyAuthJWT, create)
+  app.delete('/materials/:id', utilities.verifyAuthJWT, destroy)
 }
 
 export default materialRoutes;

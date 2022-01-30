@@ -37,8 +37,10 @@ let ordId: string | undefined
 let order: Order;
 
 
+/*
 // remove all orders from table before any test and add 1 order
 beforeEach(async function(){
+    console.log("B4 EACH ORDERS")
     await orderStore.deleteAll();
     order = await orderStore.create(testOrd);
     ordId = order.id;
@@ -47,6 +49,7 @@ beforeEach(async function(){
     shoeProd = await productStore.create(shoes);
     shoeId = shoeProd.id;
 });
+*/
 
 describe('Test orders endpoint responses', () => {    
      it('index: GET /orders', async(done) => {   

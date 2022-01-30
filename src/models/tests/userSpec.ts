@@ -7,19 +7,43 @@ import {UserStore, User} from '../user'
 import utilities from '../../utilities/utilities'
 import bcrypt from 'bcrypt'
 
-const locationStore = new LocationStore();
-const userStore = new UserStore();
+fdescribe('User model tests', () => {
+    const userStore = new UserStore();
+    var testUser: User = {
+        first_name: "Everly",
+        last_name: "Penelo",
+        password_hash: "sampleHash4432423dccc",
+        phone: 5552221678,
+        email: "iceandfire@google.com",
+        location_id: "1"
+    }
+    var userId : string | undefined;
 
-const testUser: User = {
-    first_name: "Everly",
-    last_name: "Penelo",
-    password_hash: "sampleHash4432423dccc",
-    phone: 5552221678,
-    email: "everly.penelo@google.com",
-    location_id: "1"
-}
+    const locationStore = new LocationStore();
+    var testLocation: Location = {
+        name: "Test Location",
+        zip: 80922
+    }
+    var locationId : string | undefined;
+    
+    beforeAll(async function () {
+        await locationStore.deleteAll();
+        const location = await locationStore.create(testLocation);
+        locationId = location.id;
+        testUser.location_id = locationId;
+    });
 
-describe('User model tests', () => {
+    afterAll(async function(){
+        locationStore.deleteAll();
+        userStore.deleteAll();
+    });
+
+    beforeEach( async function() {
+        await userStore.deleteAll();
+        const user = await userStore.create(testUser);
+        userId = user.id;
+    });
+
     // READ tests
     it('Should have an index method', () => {
         expect(userStore.index).toBeDefined();
@@ -37,8 +61,8 @@ describe('User model tests', () => {
         expect(userStore.create).toBeDefined();
     });
     it('Should add sample user to the users table', async () => {
+        await userStore.deleteAll();
         const createResult = await userStore.create(testUser);
-
         // create a copy of result to change null values to undefined 
         const copyResult = (utilities.objectNullValsToUndefined(createResult) as User);
 
@@ -61,6 +85,7 @@ describe('User model tests', () => {
     });
     it("delete should remove a user from the users table", async () => {
         // create location row
+        await userStore.deleteAll();
         const createResult = await userStore.create(testUser);
         const userId = createResult.id?.toString();
         // check id is defined for added location
@@ -73,7 +98,6 @@ describe('User model tests', () => {
         }else{
             throw new Error("Invalid user id");
         }
-
     });
 
 });

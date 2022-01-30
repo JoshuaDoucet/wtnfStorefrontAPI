@@ -45,11 +45,14 @@ let user: User;
 
 // remove all users and locations from tables before any test 
 // and add 1 location and user
+/*
 beforeEach( async function() {
+    console.log("B4 EACH USERS")
     userStore.deleteAll();
     user = await userStore.create(testUser);
     userId = user.id;
 });
+*/
 
 describe('Test users endpoint responses', () => {    
      it('index: GET /users', async(done) => {   

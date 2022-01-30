@@ -4,6 +4,7 @@
 
 import express, { Request, Response } from 'express'
 import { Order, OrderStore } from '../models/order'
+import utilities from '../utilities/utilities';
 
 const store = new OrderStore();
 
@@ -97,12 +98,12 @@ const destroy = async (req: Request, res: Response) => {
 
 // Routes to connect the Express application to products data
 const orderRoutes = (app: express.Application) => {
-  app.get('/orders', index)
-  app.get('/orders/:id', show)
-  app.get('/orders/:id/products', getProducts)
-  app.post('/orders', create)
-  app.post('/orders/:id/products', addProduct)
-  app.delete('/orders/:id', destroy)
+  app.get('/orders', utilities.verifyAuthJWT, index)
+  app.get('/orders/:id', utilities.verifyAuthJWT, show)
+  app.get('/orders/:id/products', utilities.verifyAuthJWT, getProducts)
+  app.post('/orders', utilities.verifyAuthJWT, create)
+  app.post('/orders/:id/products', utilities.verifyAuthJWT, addProduct)
+  app.delete('/orders/:id', utilities.verifyAuthJWT, destroy)
 }
 
 export default orderRoutes;

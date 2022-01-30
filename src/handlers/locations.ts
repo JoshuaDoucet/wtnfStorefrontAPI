@@ -4,6 +4,7 @@
 
 import express, { Request, Response } from 'express'
 import { Location, LocationStore } from '../models/location'
+import utilities from '../utilities/utilities';
 
 const store = new LocationStore();
 
@@ -78,10 +79,10 @@ const destroy = async (req: Request, res: Response) => {
 
 // Routes to connect the Express application to locations data
 const locationRoutes = (app: express.Application) => {
-  app.get('/locations', index)
-  app.get('/locations/:id', show)
-  app.post('/locations', create)
-  app.delete('/locations/:id', destroy)
+  app.get('/locations', utilities.verifyAuthJWT, index)
+  app.get('/locations/:id', utilities.verifyAuthJWT, show)
+  app.post('/locations', utilities.verifyAuthJWT, create)
+  app.delete('/locations/:id', utilities.verifyAuthJWT, destroy)
 }
 
 export default locationRoutes;

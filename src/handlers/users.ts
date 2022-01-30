@@ -39,7 +39,6 @@ const show = async (req: Request, res: Response) => {
 // /users [POST]
 const create = async (req: Request, res: Response) => {
     var userName: string | undefined;
-    console.log(1)
     try {
         // Pull value for error handling
         userName = req.body.name;
@@ -51,15 +50,13 @@ const create = async (req: Request, res: Response) => {
             email: req.body.email,
             location_id: req.body.location_id,
         };
-        console.log(2)
         const newUser = await store.create(user);
-        console.log(3)
         // Sign new JWT after successful user creation
-        var token = jwt.sign({ user: newUser }, (process.env.JWT_SECRET as string));
-        console.log(4)
+        var token = jwt.sign({ user: newUser },
+             (process.env.JWT_SECRET as string),
+             { expiresIn: '1h' });
         res.json(token);
     } catch(error) {
-        console.log(5)
         res.status(400);
         res.json(`User name [${userName}] not added. ERR -- ${error}`);
     }
@@ -85,23 +82,24 @@ const destroy = async (req: Request, res: Response) => {
 const authenticate = async (req: Request, res: Response) => {
     try {
         const authUser = await store.authenticate(req.body.email, req.body.password)
-        var token = jwt.sign({ user: authUser }, (process.env.JWT_SECRET as string));
+        var token = jwt.sign({ user: authUser }, 
+            (process.env.JWT_SECRET as string),
+            { expiresIn: '1h' });
         res.json(token)
     } catch(error) {
         res.status(401)
-        res.json({ error })
+        res.json(error)
     }
   }
 
 
 // Routes to connect the Express application to users data
 const userRoutes = (app: express.Application) => {
-  app.get('/users', index);
-  app.get('/users/:id', show);
+  app.get('/users', utilities.verifyAuthJWT, index);
+  app.get('/users/:id', utilities.verifyAuthJWT, show);
   app.get('/authenticate', authenticate);
   app.post('/users', create);
-  app.delete('/users/:id', destroy);
+  app.delete('/users/:id', utilities.verifyAuthJWT, destroy);
 }
-
 
 export default userRoutes;

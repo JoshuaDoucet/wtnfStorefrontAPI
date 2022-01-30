@@ -16,16 +16,21 @@ const objectNullValsToUndefined = (inObj: object): object => {
 
 const verifyAuthJWT = (req: Request, res: Response, next: NextFunction) => {
     try {
-        const authorizationHeader = req.headers.authorization
-        if(authorizationHeader){
-            const token = authorizationHeader.split(' ')[1]
+        const authHeader = req.headers.authorization
+        if(authHeader){
+            const token = authHeader.split(' ')[1]
+            console.log(token)
             const decoded = jwt.verify(token, process.env.JWT_SECRET as string)
+            console.log("Decoded");
+            console.log(decoded);
             next();
         }else{
-            throw new Error("auth header must be defined")
+            res.status(401)
+                .json("Authorization Token not Found. Please Sign-In or Sign-Up")
         }
     } catch (error) {
         res.status(401)
+            .json(`Invalid token provided with request. Please sign-in or reauthenticate. <br> ERR -- ${error}`)
     }
 }
 

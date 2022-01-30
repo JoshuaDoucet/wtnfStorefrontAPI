@@ -5,41 +5,42 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 ## API Endpoints
 #### Products
-- Index:  ✅ 
-  - "/products" [GET]
-- Show:   ✅
-  - "/products/:id" [GET]
-- Create:  
-  - "/products" [POST][token required]
-- [OPTIONAL] Top 5 most popular products: 
-  - "/products/popular" [GET]
-- [OPTIONAL] Products by category (args: product category) 
+- ✅ Index:   
+  -  "/products" [GET]
+- ✅ Show:   
+  -  "/products/:id" [GET]
+- ✅Create:  
+  -  "/products" [POST][token required]
+- ❌ [OPTIONAL] Top 5 most popular products: 
+  - "/products/popular" [GET] 
+- ❌ [OPTIONAL] Products by category (args: product category) 
   - "/products/category" [GET]
-- [OPTIONAL] Update: 
+- ❌ [OPTIONAL] Update:  
   - "/products/:id" [PUT][token required]
-- [OPTIONAL] Delete: 
+- ✅ [OPTIONAL] Delete: 
   - "/products/:id" [DELETE][token required]
 
 #### Users  
-- Index: "/users" [GET][token required]
-- Show: "/users/:id"  [GET][token required]
-- Create "/users" [POST][token required]
-- [OPTIONAL] Update: "/users/:id" [PUT][token required]
-- [OPTIONAL] Delete: "/users/:id" [DELETE][token required]
+- ✅ Index: "/users" [GET][token required] 
+- ✅ Show: "/users/:id"  [GET][token required] 
+- ✅ Create "/users" [POST][token required] 
+- ❌ [OPTIONAL] Update: "/users/:id" [PUT][token required]  
+- ✅ [OPTIONAL] Delete: "/users/:id" [DELETE][token required] 
 
 #### Orders
-- Current Order by user (args: user id) 
-    - "/orders/active" [GET][token required]
-    - "/orders/:id/products" [GET][token required]
-- [OPTIONAL] Completed Orders by user (args: user id) 
+- ⚠️ Current Order by user (args: user id) 
+    - ⚠️ "/cart" [GET][token required]
+    - ✅ "/orders/:id/products" [GET][token required]
+- ❌ [OPTIONAL] Completed Orders by user (args: user id) 
     - "/orders/complete/products" [GET][token required]
-- [OPTIONAL] Add product to current order (args: user id, product_id, quantity)
+- ✅ [OPTIONAL] Add product to current order (args: user id, product_id, quantity) 
     - "/orders/:id/products" [POST][token required]
-- [OPTIONAL] Remove product from current order (args: user id, product_id)
-    - "/orders/:id/products" [DELETE][token required]
+- ❌ [OPTIONAL] Remove product from current order (args: user id, product_id) 
+    - "/orders/:id/products" [DELETE][token required] 
 
+✅
 ## Data Shapes
-
+✅
 #### Product
 - id [SERIAL PRIMARY KEY]
 - name [VARCHAR NOT NULL]
@@ -84,14 +85,15 @@ CREATE TABLE products (
       location BIGINT REFERENCES locations(id)
 );
 
-#### User ✅
-- id [SERIAL PRIMARY KEY] ✅
-- firstName [VARCHAR] ✅
-- lastName [VARCHAR] ✅
-- password_hash [VARCHAR] ✅
-- [OPTIONAL] phone [BIGINT] ✅
-- [OPTIONAL] email [TEXT] ✅
-- [OPTIONAL] location (1:M) [BIGINT REFERENCES locations(id)] ✅
+✅
+#### User 
+- id [SERIAL PRIMARY KEY] 
+- firstName [VARCHAR] 
+- lastName [VARCHAR]
+- password_hash [VARCHAR]
+- [OPTIONAL] phone [BIGINT]
+- [OPTIONAL] email [TEXT]
+- [OPTIONAL] location (1:M) [BIGINT REFERENCES locations(id)]
 
 CREATE TABLE users (
      id SERIAL PRIMARY KEY, 
@@ -103,10 +105,11 @@ CREATE TABLE users (
      location BIGINT REFERENCES locations(id)
 );
 
-#### Orders ✅
-- id [SERIAL PRIMARY KEY] ✅
-- user_id [BIGINT REFERENCES users(id)] ✅
-- status (active or complete) [VARCHAR(32)] ✅
+✅
+#### Orders 
+- id [SERIAL PRIMARY KEY] 
+- user_id [BIGINT REFERENCES users(id)] 
+- status (active or complete) [VARCHAR] 
 
 CREATE TABLE orders (
       id SERIAL PRIMARY KEY,
@@ -114,11 +117,12 @@ CREATE TABLE orders (
       status VARCHAR(32) NOT NULL
 );
 
-#### order_products ✅
-- id [SERIAL PRIMARY KEY] ✅
-- product_id [BIGINT REFERENCES products(id)] ✅
-- order_id [BIGINT REFERENCES orders(id)] ✅
-- product_quantity [INTEGER] ✅
+✅ 
+#### order_products 
+- id [SERIAL PRIMARY KEY] 
+- product_id [BIGINT REFERENCES products(id)] 
+- order_id [BIGINT REFERENCES orders(id)] 
+- product_quantity [INTEGER] 
 
 CREATE TABLE order_products (
      id SERIAL PRIMARY KEY,
@@ -127,18 +131,18 @@ CREATE TABLE order_products (
      product_quantity INTEGER NOT NULL
 );
 
-[OPTIONAL] ✅
-#### location ✅
-- id [SERIAL PRIMARY KEY] ✅ 
-- street_addr_1 [VARCHAR] ✅
-- street_addr_2 [VARCHAR] ✅
-- city [VARCHAR] ✅
-- state [VARCHAR] ✅
-- zip [INTEGER] ✅
-- country [VARCHAR] ✅
-- lat [NUMERIC] ✅
-- long [NUMERIC] ✅
-- other_info [TEXT] ✅
+✅ [OPTIONAL] 
+#### location 
+- id [SERIAL PRIMARY KEY] 
+- street_addr_1 [VARCHAR] 
+- street_addr_2 [VARCHAR] 
+- city [VARCHAR] 
+- state [VARCHAR] 
+- zip [INTEGER] 
+- country [VARCHAR] 
+- lat [NUMERIC] 
+- long [NUMERIC] 
+- other_info [TEXT] 
 
 CREATE TABLE locations (
      id SERIAL PRIMARY KEY,
@@ -153,14 +157,14 @@ CREATE TABLE locations (
      other_info TEXT
 );
 
-[OPTIONAL]  
-#### colors  ✅
-- id [SERIAL PRIMARY KEY]  ✅
-- name [VARCHAR(64)] NOT NULL  ✅
-- red [SMALLINT]  ✅
-- green [SMALLINT] ✅
-- blue [SMALLINT] ✅
-- hex [VARCHAR(7)] ✅
+✅ [OPTIONAL]  
+#### colors  
+- id [SERIAL PRIMARY KEY]  
+- name [VARCHAR(64)] NOT NULL  
+- red [SMALLINT]  
+- green [SMALLINT] 
+- blue [SMALLINT] 
+- hex [VARCHAR(7)] 
 
 CREATE TABLE colors (
      id SERIAL PRIMARY KEY,
@@ -171,11 +175,11 @@ CREATE TABLE colors (
      hex VARCHAR(7)
 );
 
-[OPTIONAL]  ✅
+✅ [OPTIONAL]  
 #### product_colors
-- id [SERIAL PRIMARY KEY]  ✅
-- product_id [BIGINT REFERENCES products(id)]  ✅
-- color_id [BIGINT REFERENCES colors(id)]  ✅
+- id [SERIAL PRIMARY KEY]  
+- product_id [BIGINT REFERENCES products(id)]  
+- color_id [BIGINT REFERENCES colors(id)]  
 
 CREATE TABLE product_colors ( 
      id SERIAL PRIMARY KEY,
@@ -183,21 +187,21 @@ CREATE TABLE product_colors (
      color_id BIGINT REFERENCES colors(id)
 );
 
-[OPTIONAL]
-#### materials  ✅
-- id [SERIAL PRIMARY KEY]  ✅
-- name [VARCHAR(100)]  ✅
+✅ [OPTIONAL]
+#### materials  
+- id [SERIAL PRIMARY KEY]  
+- name [VARCHAR(100)]  
 
 CREATE TABLE materials (
      id SERIAL PRIMARY KEY,
      name VARCHAR NOT NULL
 );
 
-[OPTIONAL] 
-#### product_materials  ✅
-- id [SERIAL PRIMARY KEY]  ✅
-- product_id [BIGINT REFERENCES products(id)]  ✅
-- material_id [BIGINT REFERENCES materials(id)]  ✅
+✅ [OPTIONAL] 
+#### product_materials  
+- id [SERIAL PRIMARY KEY]  
+- product_id [BIGINT REFERENCES products(id)]  
+- material_id [BIGINT REFERENCES materials(id)]  
 
 CREATE TABLE product_materials (
      id SERIAL PRIMARY KEY,

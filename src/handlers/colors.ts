@@ -4,6 +4,7 @@
 
 import express, { Request, Response } from 'express'
 import { Color, ColorStore } from '../models/color'
+import utilities from '../utilities/utilities';
 
 const store = new ColorStore();
 
@@ -75,8 +76,8 @@ const destroy = async (req: Request, res: Response) => {
 const colorRoutes = (app: express.Application) => {
   app.get('/colors', index)
   app.get('/colors/:id', show)
-  app.post('/colors', create)
-  app.delete('/colors/:id', destroy)
+  app.post('/colors', utilities.verifyAuthJWT, create)
+  app.delete('/colors/:id', utilities.verifyAuthJWT, destroy)
 }
 
 export default colorRoutes;

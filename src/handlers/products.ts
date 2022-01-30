@@ -6,6 +6,7 @@
 
 import express, { Request, Response } from 'express'
 import { Product, ProductStore } from '../models/product'
+import utilities from '../utilities/utilities';
 
 const store = new ProductStore();
 
@@ -146,10 +147,10 @@ const productRoutes = (app: express.Application) => {
   app.get('/products/:id', show)
   app.get('/products/:id/colors', getColors)
   app.get('/products/:id/materials', getMaterials)
-  app.post('/products', create)
-  app.post('/products/:id/colors', addColor)
-  app.post('/products/:id/materials', addMaterial)
-  app.delete('/products/:id', destroy)
+  app.post('/products', utilities.verifyAuthJWT, create)
+  app.post('/products/:id/colors', utilities.verifyAuthJWT, addColor)
+  app.post('/products/:id/materials', utilities.verifyAuthJWT, addMaterial)
+  app.delete('/products/:id', utilities.verifyAuthJWT,  destroy)
 }
 
 export default productRoutes;
