@@ -4,7 +4,8 @@
 
 import {LocationStore, Location} from '../location'
 import {UserStore, User} from '../user'
-import objectNullValsToUndefined from '../../utilities/utilities'
+import utilities from '../../utilities/utilities'
+import bcrypt from 'bcrypt'
 
 const locationStore = new LocationStore();
 const userStore = new UserStore();
@@ -14,7 +15,7 @@ const testUser: User = {
     last_name: "Penelo",
     password_hash: "sampleHash4432423dccc",
     phone: 5552221678,
-    email: "everly.penelo@amazing.com",
+    email: "everly.penelo@google.com",
     location_id: "1"
 }
 
@@ -39,13 +40,16 @@ describe('User model tests', () => {
         const createResult = await userStore.create(testUser);
 
         // create a copy of result to change null values to undefined 
-        const copyResult = (objectNullValsToUndefined(createResult) as User);
+        const copyResult = (utilities.objectNullValsToUndefined(createResult) as User);
 
         // check to see if correct location details were added to new row
         expect(copyResult.first_name).toEqual(testUser.first_name);
         expect(copyResult.last_name).toEqual(testUser.last_name);
-        // TODO update test for password
-        expect(copyResult.password_hash).toEqual(testUser.password_hash);
+        // Input password should not equal pass in DB
+        expect(copyResult.password_hash).not.toEqual(testUser.password_hash);
+        // Test password hashing
+        const authUser = userStore.authenticate(testUser.email, testUser.password_hash);
+        expect(typeof authUser).toEqual(typeof copyResult)
         expect(copyResult.phone+'').toEqual(testUser.phone+'');
         expect(copyResult.email).toEqual(testUser.email);
         // TODO test location ID

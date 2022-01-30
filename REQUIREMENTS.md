@@ -5,11 +5,11 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 ## API Endpoints
 #### Products
-- Index: 
+- Index:  ✅ 
   - "/products" [GET]
-- Show: 
+- Show:   ✅
   - "/products/:id" [GET]
-- Create: 
+- Create:  
   - "/products" [POST][token required]
 - [OPTIONAL] Top 5 most popular products: 
   - "/products/popular" [GET]
@@ -20,7 +20,7 @@ These are the notes from a meeting with the frontend developer that describe wha
 - [OPTIONAL] Delete: 
   - "/products/:id" [DELETE][token required]
 
-#### Users
+#### Users  
 - Index: "/users" [GET][token required]
 - Show: "/users/:id"  [GET][token required]
 - Create "/users" [POST][token required]
@@ -29,7 +29,7 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 #### Orders
 - Current Order by user (args: user id) 
-    - "/orders/active/products" [GET][token required]
+    - "/orders/active" [GET][token required]
     - "/orders/:id/products" [GET][token required]
 - [OPTIONAL] Completed Orders by user (args: user id) 
     - "/orders/complete/products" [GET][token required]
@@ -84,14 +84,14 @@ CREATE TABLE products (
       location BIGINT REFERENCES locations(id)
 );
 
-#### User
-- id [SERIAL PRIMARY KEY]
-- firstName [VARCHAR]
-- lastName [VARCHAR]
-- password_hash [VARCHAR]
-- [OPTIONAL] phone [BIGINT]
-- [OPTIONAL] email [TEXT]
-- [OPTIONAL] location (1:M) [BIGINT REFERENCES locations(id)]
+#### User ✅
+- id [SERIAL PRIMARY KEY] ✅
+- firstName [VARCHAR] ✅
+- lastName [VARCHAR] ✅
+- password_hash [VARCHAR] ✅
+- [OPTIONAL] phone [BIGINT] ✅
+- [OPTIONAL] email [TEXT] ✅
+- [OPTIONAL] location (1:M) [BIGINT REFERENCES locations(id)] ✅
 
 CREATE TABLE users (
      id SERIAL PRIMARY KEY, 
@@ -103,10 +103,10 @@ CREATE TABLE users (
      location BIGINT REFERENCES locations(id)
 );
 
-#### Orders
-- id [SERIAL PRIMARY KEY]
-- user_id [BIGINT REFERENCES users(id)]
-- status (active or complete) [VARCHAR(32)]
+#### Orders ✅
+- id [SERIAL PRIMARY KEY] ✅
+- user_id [BIGINT REFERENCES users(id)] ✅
+- status (active or complete) [VARCHAR(32)] ✅
 
 CREATE TABLE orders (
       id SERIAL PRIMARY KEY,
@@ -114,11 +114,11 @@ CREATE TABLE orders (
       status VARCHAR(32) NOT NULL
 );
 
-#### order_products
-- id [SERIAL PRIMARY KEY]
-- product_id [BIGINT REFERENCES products(id)]
-- order_id [BIGINT REFERENCES orders(id)]
-- product_quantity [INTEGER]
+#### order_products ✅
+- id [SERIAL PRIMARY KEY] ✅
+- product_id [BIGINT REFERENCES products(id)] ✅
+- order_id [BIGINT REFERENCES orders(id)] ✅
+- product_quantity [INTEGER] ✅
 
 CREATE TABLE order_products (
      id SERIAL PRIMARY KEY,
@@ -127,18 +127,18 @@ CREATE TABLE order_products (
      product_quantity INTEGER NOT NULL
 );
 
-[OPTIONAL]
-#### location
-- id [SERIAL PRIMARY KEY]
-- street_addr_1 [VARCHAR]
-- street_addr_2 [VARCHAR]
-- city [VARCHAR]
-- state [VARCHAR]
-- zip [INTEGER]
-- country [VARCHAR]
-- lat [NUMERIC]
-- long [NUMERIC]
-- other_info [TEXT]
+[OPTIONAL] ✅
+#### location ✅
+- id [SERIAL PRIMARY KEY] ✅ 
+- street_addr_1 [VARCHAR] ✅
+- street_addr_2 [VARCHAR] ✅
+- city [VARCHAR] ✅
+- state [VARCHAR] ✅
+- zip [INTEGER] ✅
+- country [VARCHAR] ✅
+- lat [NUMERIC] ✅
+- long [NUMERIC] ✅
+- other_info [TEXT] ✅
 
 CREATE TABLE locations (
      id SERIAL PRIMARY KEY,
@@ -153,14 +153,14 @@ CREATE TABLE locations (
      other_info TEXT
 );
 
-[OPTIONAL]
-#### colors
-- id [SERIAL PRIMARY KEY]
-- name [VARCHAR(64)] NOT NULL
-- red [SMALLINT]
-- green [SMALLINT]
-- blue [SMALLINT]
-- hex [VARCHAR(7)]
+[OPTIONAL]  
+#### colors  ✅
+- id [SERIAL PRIMARY KEY]  ✅
+- name [VARCHAR(64)] NOT NULL  ✅
+- red [SMALLINT]  ✅
+- green [SMALLINT] ✅
+- blue [SMALLINT] ✅
+- hex [VARCHAR(7)] ✅
 
 CREATE TABLE colors (
      id SERIAL PRIMARY KEY,
@@ -171,33 +171,33 @@ CREATE TABLE colors (
      hex VARCHAR(7)
 );
 
-[OPTIONAL]
+[OPTIONAL]  ✅
 #### product_colors
-- id [SERIAL PRIMARY KEY]
-- product_id [BIGINT REFERENCES products(id)]
-- color_id [BIGINT REFERENCES colors(id)]
+- id [SERIAL PRIMARY KEY]  ✅
+- product_id [BIGINT REFERENCES products(id)]  ✅
+- color_id [BIGINT REFERENCES colors(id)]  ✅
 
-CREATE TABLE product_colors (
+CREATE TABLE product_colors ( 
      id SERIAL PRIMARY KEY,
      product_id BIGINT REFERENCES products(id),
      color_id BIGINT REFERENCES colors(id)
 );
 
 [OPTIONAL]
-#### materials
-- id [SERIAL PRIMARY KEY]
-- name [VARCHAR(100)]
+#### materials  ✅
+- id [SERIAL PRIMARY KEY]  ✅
+- name [VARCHAR(100)]  ✅
 
 CREATE TABLE materials (
      id SERIAL PRIMARY KEY,
      name VARCHAR NOT NULL
 );
 
-[OPTIONAL]
-#### product_materials
-- id [SERIAL PRIMARY KEY]
-- product_id [BIGINT REFERENCES products(id)]
-- material_id [BIGINT REFERENCES materials(id)]
+[OPTIONAL] 
+#### product_materials  ✅
+- id [SERIAL PRIMARY KEY]  ✅
+- product_id [BIGINT REFERENCES products(id)]  ✅
+- material_id [BIGINT REFERENCES materials(id)]  ✅
 
 CREATE TABLE product_materials (
      id SERIAL PRIMARY KEY,

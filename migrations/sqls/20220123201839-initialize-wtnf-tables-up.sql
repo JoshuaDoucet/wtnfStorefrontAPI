@@ -28,8 +28,8 @@ CREATE TABLE users (
      last_name VARCHAR NOT NULL, 
      password_hash VARCHAR NOT NULL,
      phone BIGINT, 
-     email TEXT NOT NULL, 
-     location BIGINT REFERENCES locations(id) ON DELETE CASCADE
+     email TEXT NOT NULL UNIQUE, 
+     location_id BIGINT REFERENCES locations(id) ON DELETE CASCADE
 );
 
 CREATE TABLE orders (

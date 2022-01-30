@@ -5,7 +5,7 @@
 
 import {ProductStore, Product} from '../product'
 import {ColorStore, Color} from '../color'
-import objectNullValsToUndefined from '../../utilities/utilities'
+import utilities from '../../utilities/utilities'
 
 const productStore = new ProductStore();
 const colorStore = new ColorStore();
@@ -70,7 +70,7 @@ describe('Product model tests', () => {
     it('Should add sample product to the products table', async () => {
         const createResult = await productStore.create(jacket);
         // create a copy of result to change null values to undefined 
-        const copyResult = (objectNullValsToUndefined(createResult) as Product);
+        const copyResult = (utilities.objectNullValsToUndefined(createResult) as Product);
         // check to see if correct product details were added to new row
         expect(copyResult.name).toEqual(jacket.name);
         expect(copyResult.price+'').toEqual(jacket.price+'');

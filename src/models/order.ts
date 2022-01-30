@@ -109,8 +109,6 @@ export class OrderStore {
                 .query(sql, [productId, orderId, quantity])
             const orderProducts = result.rows[0]
             conn.release()
-            console.log("2")
-            console.log(orderProducts)
             return orderProducts
         } catch (err) {
             throw new Error(`Could not add product ${productId} to order ${orderId} ERR -- ${err}`)

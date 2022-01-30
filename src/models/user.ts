@@ -3,6 +3,8 @@
 // Model for a user object
 
 import Client from '../database'
+// for password hashing
+import bcrypt from 'bcrypt'
 
 export type User = {
     id?: string,
@@ -13,6 +15,11 @@ export type User = {
     email: string,
     location_id?: string
 };
+
+const {
+    BCRYPT_PEPPER,
+    BCRYPT_SALT
+} = process.env;
 
 // Class to interact with the user database table
 export class UserStore {
@@ -45,13 +52,17 @@ export class UserStore {
     // CREATE a user row
     async create(user: User): Promise<User> {
         try {
+            //Hash password before storing
+            const password_hash = bcrypt.hashSync(user.password_hash 
+                + BCRYPT_PEPPER, parseInt(BCRYPT_SALT as string))
+            
             const sql = 'INSERT INTO users (first_name, last_name, password_hash, '
-                + ' phone, email, location) '
+                + ' phone, email, location_id) '
                 + 'VALUES($1, $2, $3, $4, $5, (SELECT id from locations WHERE id=$6)) RETURNING *';
             const connect = await Client.connect()
             const result = await connect.query(sql, 
                 [
-                    user.first_name, user.last_name, user.password_hash,
+                    user.first_name, user.last_name, password_hash,
                     user.phone, user.email, user.location_id
                 ]
             );
@@ -59,6 +70,7 @@ export class UserStore {
             connect.release()
             return addedUser 
         } catch (error) {
+            console.log(error)
             throw new Error(`Could not add use ${user.email}. Error: ${error}`)
         }
     }
@@ -89,5 +101,26 @@ export class UserStore {
         } catch (err) {
             throw new Error(`Could not delete users. Error: ${err}`)
         }
+    }
+
+    //AUTHENTICATE a user
+    async authenticate(email: string, password: string): Promise<User | null>{
+        const sql = 'SELECT email, password_hash FROM users WHERE email=($1)';
+        const conn = await Client.connect();
+        const result = await conn.query(sql, [email]);
+        // of a user is found, fetch stored password hash
+        if(result.rows.length){
+            const user = result.rows[0];
+            // check if passwords match
+            if(bcrypt.compareSync(
+                password + BCRYPT_PEPPER, 
+                user.password_hash)){
+                // if match, user is authenticated
+                return user;
+            }
+        }
+
+        //No user with matching credentials found, return no uswr
+        return null;
     }
 }

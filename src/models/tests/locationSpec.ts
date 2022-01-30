@@ -3,7 +3,7 @@
 // Tests for location model
 
 import {LocationStore, Location} from '../location'
-import objectNullValsToUndefined from '../../utilities/utilities'
+import utilities from '../../utilities/utilities'
 
 const locationStore = new LocationStore();
 
@@ -38,7 +38,7 @@ describe('Location model tests', () => {
         const createResult = await locationStore.create(sampleLoc);
 
         // create a copy of result to change null values to undefined 
-        const copyResult = (objectNullValsToUndefined(createResult) as Location);
+        const copyResult = (utilities.objectNullValsToUndefined(createResult) as Location);
 
         // check to see if correct location details were added to new row
         expect(copyResult.name).toEqual(sampleLoc.name);

@@ -7,8 +7,8 @@ INSERT INTO colors (name, green, blue, hex)
     VALUES ('Green', 255, 0, '00FF00');
 INSERT INTO colors (name, red, green, blue) 
     VALUES ('Blue', 0, 0, 255);
-INSERT INTO colors (name)
-    VALUES ("Purple")
+INSERT INTO colors (name) 
+    VALUES ('Purple');
 
 --materials
 INSERT INTO materials (name) VALUES ('Leather');

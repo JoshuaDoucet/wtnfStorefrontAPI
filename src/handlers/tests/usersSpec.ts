@@ -7,7 +7,7 @@ import supertest from 'supertest';
 import app from'../../server'; // Where app is an Express server object
 import {Location, LocationStore} from '../../models/location'
 import {User, UserStore} from '../../models/user'
-import objectNullValsToUndefined from '../../utilities/utilities'
+import utilities from '../../utilities/utilities'
 
 const request = supertest(app); 
 
@@ -29,7 +29,15 @@ const testUser: User = {
     last_name: "Penelo",
     password_hash: "sampleHash4432423dccc",
     phone: 5552221678,
-    email: "everly.penelo@amazing.com",
+    email: "everly.penelo@live.com",
+    location_id: "1"
+}
+const testUser2: User = {
+    first_name: "Kyle",
+    last_name: "Cane",
+    password_hash: "sampleHash4432423dccc",
+    phone: 5552221678,
+    email: "kyle.cane@live.com",
     location_id: "1"
 }
 let userId: string | undefined;
@@ -53,7 +61,7 @@ describe('Test users endpoint responses', () => {
     it(`show: GET /users/:id`, async(done) => {   
         const response = await request.get(`/users/${userId}`);
         // create a copy of response body to change null values to undefined 
-        const bodyCopy = (objectNullValsToUndefined(response.body) as User);
+        const bodyCopy = (utilities.objectNullValsToUndefined(response.body) as User);
         // Check for valid status code
         expect(response.status).toBe(200);  
         // check 2 properties of user in the response body    
@@ -65,9 +73,9 @@ describe('Test users endpoint responses', () => {
     it(`create: POST /users`, async(done) => {   
         const response = await request
             .post(`/users`)
-            .send(testUser);
+            .send(testUser2);
         expect(response.status).toBe(200);      
-        expect(response.body.first_name).toEqual(testUser.first_name);   
+        expect(response.body.length).toBeGreaterThan(1);   
         done();     
     })
 
@@ -76,6 +84,17 @@ describe('Test users endpoint responses', () => {
             .delete(`/users/${userId}`)
         expect(response.status).toBe(200);      
         expect(response.body.email).toEqual(user.email);   
+        done();     
+    })
+
+    it(`authenticate: GET /authenticate`, async(done) => {   
+        const response = await request
+            .get(`/authenticate`)
+            .send({
+                email: testUser.email,
+                password: testUser.password_hash
+            })
+        expect(response.status).toBe(200);      
         done();     
     })
 });

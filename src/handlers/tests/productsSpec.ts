@@ -8,7 +8,7 @@ import app from'../../server'; // Where app is an Express server object
 import {Product, ProductStore} from '../../models/product'
 import {Location, LocationStore} from '../../models/location'
 import {Material, MaterialStore} from '../../models/material'
-import objectNullValsToUndefined from '../../utilities/utilities'
+import utilities from '../../utilities/utilities'
 import {Color, ColorStore} from '../../models/color';
 
 const request = supertest(app); 
@@ -85,7 +85,7 @@ describe('Test products endpoint responses', () => {
     it(`show: GET /products/:id`, async(done) => {   
         const response = await request.get(`/products/${prodId}`);
         // create a copy of response body to change null values to undefined 
-        const bodyCopy = (objectNullValsToUndefined(response.body) as Product);
+        const bodyCopy = (utilities.objectNullValsToUndefined(response.body) as Product);
         // Check for valid status code
         expect(response.status).toBe(200);  
         // check 2 properties of product in the response body    

@@ -5,7 +5,7 @@
 import supertest from 'supertest';
 import app from'../../server'; // Where app is an Express server object
 import {Location, LocationStore} from '../../models/location'
-import objectNullValsToUndefined from '../../utilities/utilities'
+import utilities from '../../utilities/utilities'
 
 const request = supertest(app); 
 const locationStore = new LocationStore();
@@ -39,7 +39,7 @@ describe('Test locations endpoint responses', () => {
     it(`show: GET /locations/:id`, async(done) => {   
         const response = await request.get(`/locations/${locId}`);
         // create a copy of response body to change null values to undefined 
-        const bodyCopy = (objectNullValsToUndefined(response.body) as Location);
+        const bodyCopy = (utilities.objectNullValsToUndefined(response.body) as Location);
         // Check for valid status code
         expect(response.status).toBe(200);  
         // check 2 properties of location in the response body    
