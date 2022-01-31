@@ -10,15 +10,17 @@ This repo acts as the backend to interact with the WTNF database of products, lo
   - Node.js v15.13.2
   - npm 8.1.2
   - a linux command line interface
-
 ### Get the application code
 * Clone this repo
+  - At the CLI run "git clone https://github.com/JoshuaDoucet/wtnfStorefront.git main"
 ### Get the postgres database up and running
 * Setup the database
-## Run the Express web server
+  - TODO
+### Run the Express web server
 * Run the web server
-## Visit the application endpoints
-* Login to the storefront
+  - At the CLI run "npm run watch" or "npm run start"
+### Visit the application endpoints
+* Login to the storefront. 
   This is required to access msot of the application data
  - [GET] /authenticate
    - HTTP request body
@@ -28,14 +30,14 @@ This repo acts as the backend to interact with the WTNF database of products, lo
          "password": "password"
      }
      ```
-     NOTE: the above credentials will be valid if using the migrations provided in the repo
+     NOTE: the above credentials will be valid if using the migrations provided in the repo. Otherwise a new user must be created before attempting to authenticate.
 * Interacting with the Color models data
  - [GET] /colors
-  - index - the response is a list of all color rows
+   - index - the response is a list of all color rows
  - [GET] /colors/:id
-  - show - the response is a single color that matches the specified id
+   - show - the response is a single color that matches the specified id
  - [POST] /colors (AUTH TOKEN)
-  - create - adds new color to database
+   - create - adds new color to database
     HTTP request body
     ```json
     {
@@ -46,8 +48,8 @@ This repo acts as the backend to interact with the WTNF database of products, lo
     }
     ```
  - [DELETE] /colors/:id
-  - delete - deletes the color specified by id from the database
-  
+   - delete - deletes the color specified by id from the database
+
 ## Jasmine tests
 * To view the project's saved test result navigate to path
  - src/test/JASMINE_TEST_RESULTS.txt
