@@ -1,6 +1,6 @@
 import {MaterialStore, Material} from '../material'
 
-fdescribe('Material model tests', () => {
+describe('Material model tests', () => {
     const materialStore = new MaterialStore();
     const leatherMat: Material = {name: "Brown leather"};
 

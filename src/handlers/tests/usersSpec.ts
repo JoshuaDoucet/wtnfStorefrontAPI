@@ -11,7 +11,7 @@ import utilities from '../../utilities/utilities'
 
 const request = supertest(app); 
 
-fdescribe('Test users endpoint responses', () => {        
+describe('Test users endpoint responses', () => {        
     const locationStore = new LocationStore();
     const testLocation: Location = {
         name: "Burger Hut",
@@ -43,13 +43,14 @@ fdescribe('Test users endpoint responses', () => {
     }
 
     beforeAll(async function(){
+        await userStore.deleteAll()
         await locationStore.deleteAll();
         const location = await locationStore.create(testLocation);
         locId = location.id;
         testUser.location_id = locId;
     });
 
-    beforeEach( async function() {
+    beforeEach( async function(done) {
         userStore.deleteAll();
         user = await userStore.create(testUser);
         userId = user.id;
@@ -61,6 +62,7 @@ fdescribe('Test users endpoint responses', () => {
                 password: testUser.password_hash
         });
         userJWT = `Bearer ${response.body}`;
+        done();
     });
 
 
@@ -99,17 +101,6 @@ fdescribe('Test users endpoint responses', () => {
             .set('Authorization', userJWT)
         expect(response.status).toBe(200);      
         expect(response.body.email).toEqual(user.email);   
-        done();     
-    })
-
-    it(`authenticate: GET /authenticate`, async(done) => {   
-        const response = await request
-            .get(`/authenticate`)
-            .send({
-                email: testUser.email,
-                password: testUser.password_hash
-            })
-        expect(response.status).toBe(200);      
         done();     
     })
 });

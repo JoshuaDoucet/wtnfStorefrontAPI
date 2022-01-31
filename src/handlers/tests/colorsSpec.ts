@@ -8,56 +8,55 @@ import {Color, ColorStore} from '../../models/color'
 import {User, UserStore} from '../../models/user'
 
 const request = supertest(app); 
-const colorStore = new ColorStore();
-const redColor: Color = {
-    name: "Red",
-    red: 255,
-    hex: "FF0000"
-};
 
-let colorID: string | undefined;
-let color: Color;
-
-// for authorization to access endpoints
-const userStore = new UserStore();
-let authUser: User;
-let authUserId: string | undefined;
-let authJWT: string;
-
-/*
-// remove all colors from table before any test and add 1 color
-beforeEach( async function() {
-    console.log("B4 EACH COLORS")
-    colorStore.deleteAll();
-    color = await colorStore.create(redColor);
-    colorID = color.id;
-});
-*/
-
-describe('Test colors endpoint responses', () => {    
+describe('Test colors endpoint responses', () => {  
+    const colorStore = new ColorStore();
+    const redColor: Color = {
+        name: "Red",
+        red: 255,
+        hex: "FF0000"
+    };
+    let colorID: string | undefined;
+    let color: Color;
+        
+    const userStore = new UserStore();
+    const testUser: User = {
+        first_name: "Everly",
+        last_name: "Penelope",
+        password_hash: "sample432423dccc",
+        phone: 5552221678,
+        email: "everly.penelope@live.com",
+    }
+    let userJWT: string;
+    let userId: string | undefined;
+    let user: User;   
+    
     beforeAll(async function(){
-        userStore.deleteAll();
-        let testUserA: User = {
-            first_name: "Test",
-            last_name: "User",
-            email: "testuser@bios.com",
-            password_hash: "badPassword"
-        };
-        authUser = await userStore.create(testUserA);
-        authUserId = authUser.id;
-
-        const response = await request
-            .get(`/authenticate`)
-            .send({
-                email: testUserA.email,
-                password: testUserA.password_hash
-            });
-        authJWT = `Bearer ${response.body}`;
-    });
+         // delete all users, add 1, get JWT for auth
+         userStore.deleteAll();
+         user = await userStore.create(testUser);
+         userId = user.id;
+ 
+         const response = await request
+             .get(`/authenticate`)
+             .send({
+                 email: testUser.email,
+                 password: testUser.password_hash
+         });
+         userJWT = `Bearer ${response.body}`;
+    })    
 
     afterAll(async function(){
-        // TODO
+        await colorStore.deleteAll();
+        await userStore.deleteAll();
     })
+
+    // remove all colors from table before any test and add 1 color
+    beforeEach( async function() {
+        colorStore.deleteAll();
+        color = await colorStore.create(redColor);
+        colorID = color.id;
+    });
 
     it('index: GET /colors', async(done) => {   
         const response = await request.get('/colors');
@@ -75,10 +74,9 @@ describe('Test colors endpoint responses', () => {
     })
 
     it(`create: POST /colors`, async(done) => {   
-        console.log("GLOB 4: " + authJWT)
         const response = await request
             .post(`/colors`)
-            .set('Authorization', authJWT)
+            .set('Authorization', userJWT)
             .send(redColor);
         expect(response.status).toBe(200);      
         expect(response.body.name).toEqual(color.name);   
@@ -88,6 +86,7 @@ describe('Test colors endpoint responses', () => {
     it(`destroy: DELETE /colors/:id`, async(done) => {   
         const response = await request
             .delete(`/colors/${colorID}`)
+            .set('Authorization', userJWT)
         expect(response.status).toBe(200);      
         expect(response.body.name).toEqual(color.name);   
         done();     

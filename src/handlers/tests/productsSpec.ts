@@ -14,7 +14,7 @@ import {User, UserStore} from '../../models/user';
 
 const request = supertest(app); 
 
-fdescribe('Test products endpoint responses', () => {   
+describe('Test products endpoint responses', () => {   
     const productStore = new ProductStore();
     var coat: Product = {
         name: "Columbia Blue Winter coat, Mens, XL",

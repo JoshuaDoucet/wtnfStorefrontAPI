@@ -5,7 +5,7 @@
 import {LocationStore, Location} from '../location'
 import utilities from '../../utilities/utilities'
 
-fdescribe('Location model tests', () => {
+describe('Location model tests', () => {
     const locationStore = new LocationStore();
     const sampleLoc: Location = {
         name: "Sooper 77",

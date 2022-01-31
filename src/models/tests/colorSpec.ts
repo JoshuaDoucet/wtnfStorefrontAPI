@@ -1,6 +1,6 @@
 import {ColorStore, Color} from '../color'
 
-fdescribe('Color model tests', () => {
+describe('Color model tests', () => {
     const colorStore = new ColorStore();
     const blueColor: Color = {name: "Blue", blue: 255, hex: "0000FF"};
 

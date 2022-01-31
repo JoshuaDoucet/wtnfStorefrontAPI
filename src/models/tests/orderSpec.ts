@@ -5,11 +5,11 @@
 
 import {ProductStore, Product} from '../product'
 import {OrderStore, Order} from '../order'
+import { UserStore } from '../user';
 
 describe('Order model tests', () => {
+    // Product
     const productStore = new ProductStore();
-    const orderStore = new OrderStore();
-
     var purse: Product = {
         name: "Toni, Gray Cross-Body Bag",
         price: 49.95,
@@ -25,23 +25,24 @@ describe('Order model tests', () => {
     };
     var productId: string;
 
+    // Order
+    const orderStore = new OrderStore();
     var testOrder: Order = {
         status: "active",
         user_id: "1"
     }
-
     var order: Order;
-    var order_id: string;
+    var order_id: string | undefined;
 
     beforeEach(async function (){
         await orderStore.deleteAll();
         order = await orderStore.create(testOrder);
-        if(order.id)
-            order_id = order.id;
+        order_id = order.id;
     });
 
     afterAll(async function(){
         await orderStore.deleteAll();
+        await productStore.deleteAll();
     });
 
     // READ tests
