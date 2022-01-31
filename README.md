@@ -58,23 +58,23 @@ This repo acts as the backend to interact with the WTNF database of products, lo
    - create - adds new location to database
      HTTP request body
      ```json
-    {
-        "id": 2,
-        "name": "Groceries",
-        "street_addr_1": "7030 Baptist Road",
-        "street_addr_2": null,
-        "city": "Monument",
-        "state": "CO",
-        "zip": 80921,
-        "country": "US",
-        "lat": "16",
-        "long": "20",
-        "other_info": "Where people fight for the last item"
-    }
+     {
+         "id": 2,
+         "name": "Groceries",
+         "street_addr_1": "7030 Baptist Road",
+         "street_addr_2": null,
+         "city": "Monument",
+         "state": "CO",
+         "zip": 80921,
+         "country": "US",
+         "lat": "16",
+         "long": "20",
+         "other_info": "Where people fight for the last item"
+      }
      ```
- - [DELETE] /colors/:id (AUTH TOKEN)
+ - [DELETE] /locations/:id (AUTH TOKEN)
    - delete - deletes the location specified by id from the database. Response returns the location row being deleted.
-   
+
 ## Jasmine tests
 * To view the project's saved test result navigate to path
   - src/test/JASMINE_TEST_RESULTS.txt
