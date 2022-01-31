@@ -70,7 +70,6 @@ export class UserStore {
             connect.release()
             return addedUser 
         } catch (error) {
-            console.log(error)
             throw new Error(`Could not add use ${user.email}. Error: ${error}`)
         }
     }
@@ -105,21 +104,26 @@ export class UserStore {
 
     //AUTHENTICATE a user
     async authenticate(email: string, password: string): Promise<User | null>{
-        const sql = 'SELECT email, password_hash FROM users WHERE email=($1)';
-        const conn = await Client.connect();
-        const result = await conn.query(sql, [email]);
-        // of a user is found, fetch stored password hash
-        if(result.rows.length){
-            const user = result.rows[0];
-            // check if passwords match
-            if(bcrypt.compareSync(
-                password + BCRYPT_PEPPER, 
-                user.password_hash)){
-                // if match, user is authenticated
-                return user;
-            }
+        try{
+            const sql = 'SELECT email, password_hash FROM users WHERE email=($1)';
+            const conn = await Client.connect();
+            const result = await conn.query(sql, [email]);
+            conn.release()
+            // of a user is found, fetch stored password hash
+            if(result.rows.length){
+                const user = result.rows[0];
+                // check if passwords match
+                if(bcrypt.compareSync(
+                    password + BCRYPT_PEPPER, 
+                    user.password_hash)){
+                    // if match, user is authenticated
+                    return user;
+                }
+            }    
+        }catch(error){
+            throw new Error(`Could not authenticate user. Error: ${error}`)
         }
-
+        
         //No user with matching credentials found, return no uswr
         return null;
     }

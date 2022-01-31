@@ -50,7 +50,7 @@ describe('Test users endpoint responses', () => {
         testUser.location_id = locId;
     });
 
-    beforeEach( async function(done) {
+    beforeEach( async function() {
         userStore.deleteAll();
         user = await userStore.create(testUser);
         userId = user.id;
@@ -61,8 +61,7 @@ describe('Test users endpoint responses', () => {
                 email: testUser.email,
                 password: testUser.password_hash
         });
-        userJWT = `Bearer ${response.body}`;
-        done();
+         userJWT = `Bearer ${response.body}`;
     });
 
 
@@ -101,6 +100,17 @@ describe('Test users endpoint responses', () => {
             .set('Authorization', userJWT)
         expect(response.status).toBe(200);      
         expect(response.body.email).toEqual(user.email);   
+        done();     
+    })
+
+    it(`authenticate: GET /authenticate`, async(done) => {   
+        const response = await request
+            .get(`/authenticate`)
+            .send({
+                email: testUser.email,
+                password: testUser.password_hash
+            })
+        expect(response.status).toBe(200);      
         done();     
     })
 });
