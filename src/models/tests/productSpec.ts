@@ -23,7 +23,7 @@ afterEach(async function() {
 })
 */
 
-fdescribe('Product model tests', () => {
+describe('Product model tests', () => {
     const productStore = new ProductStore();
     var jacket: Product = {
         name: "Columbia Blue/Gray Winter Jacket, Mens, XL",

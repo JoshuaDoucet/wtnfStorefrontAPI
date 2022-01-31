@@ -6,48 +6,51 @@
 import {ProductStore, Product} from '../product'
 import {OrderStore, Order} from '../order'
 
-const productStore = new ProductStore();
-const orderStore = new OrderStore();
-
-var purse: Product = {
-    name: "Toni, Gray Cross-Body Bag",
-    price: 49.95,
-    cost: 10,
-    boh: 1,
-    for_sale: false,
-    category: "Bag",
-    owner: "JD",
-    size: "OS",
-    brand: "Toni",
-    condition: "Used- Like New",
-    weight_grams: 210,
-};
-
-var testOrder: Order = {
-    status: "active",
-    user_id: "1"
-}
-
-var order: Order;
-var order_id: string;
-
-/*
-beforeEach(async function (){
-    order = await orderStore.create(testOrder);
-    if(order.id)
-        order_id = order.id;
-})
-*/
-
-
 describe('Order model tests', () => {
+    const productStore = new ProductStore();
+    const orderStore = new OrderStore();
+
+    var purse: Product = {
+        name: "Toni, Gray Cross-Body Bag",
+        price: 49.95,
+        cost: 10,
+        boh: 1,
+        for_sale: false,
+        category: "Bag",
+        owner: "JD",
+        size: "OS",
+        brand: "Toni",
+        condition: "Used- Like New",
+        weight_grams: 210,
+    };
+    var productId: string;
+
+    var testOrder: Order = {
+        status: "active",
+        user_id: "1"
+    }
+
+    var order: Order;
+    var order_id: string;
+
+    beforeEach(async function (){
+        await orderStore.deleteAll();
+        order = await orderStore.create(testOrder);
+        if(order.id)
+            order_id = order.id;
+    });
+
+    afterAll(async function(){
+        await orderStore.deleteAll();
+    });
+
     // READ tests
     it('Should have an index method', () => {
         expect(orderStore.index).toBeDefined();
     });
-    it('index should return a list of 2 order', async () => {
+    it('index should return a list of 1 order', async () => {
         const result = await orderStore.index();
-        expect(result.length).toEqual(2);
+        expect(result.length).toEqual(1);
     });
     it('Should have a show method', () => {
         expect(orderStore.show).toBeDefined();

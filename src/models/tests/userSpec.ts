@@ -7,7 +7,7 @@ import {UserStore, User} from '../user'
 import utilities from '../../utilities/utilities'
 import bcrypt from 'bcrypt'
 
-fdescribe('User model tests', () => {
+describe('User model tests', () => {
     const userStore = new UserStore();
     var testUser: User = {
         first_name: "Everly",

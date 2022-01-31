@@ -1,18 +1,21 @@
 import {ColorStore, Color} from '../color'
 
-const colorStore = new ColorStore();
+fdescribe('Color model tests', () => {
+    const colorStore = new ColorStore();
+    const blueColor: Color = {name: "Blue", blue: 255, hex: "0000FF"};
 
-const blueColor: Color = {name: "Blue", blue: 255, hex: "0000FF"};
+    beforeAll(async function(){
+        await colorStore.deleteAll();
+        await colorStore.create(blueColor);
+    })
 
-
-describe('Color model tests', () => {
     // READ tests
     it('Should have an index method', () => {
         expect(colorStore.index).toBeDefined();
     });
-    it('index should return a list of 3 color', async () => {
+    it('index should return a list of 1 color', async () => {
         const result = await colorStore.index();
-        expect(result.length).toEqual(3);
+        expect(result.length).toEqual(1);
     });
     it('Should have an show method', () => {
         expect(colorStore.show).toBeDefined();

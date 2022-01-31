@@ -5,19 +5,27 @@
 import {LocationStore, Location} from '../location'
 import utilities from '../../utilities/utilities'
 
-const locationStore = new LocationStore();
+fdescribe('Location model tests', () => {
+    const locationStore = new LocationStore();
+    const sampleLoc: Location = {
+        name: "Sooper 77",
+        street_addr_1: "1070 Baptist Rd",
+        city: "Colorado Springs",
+        state: "CO",
+        zip: 80921,
+        country: "USA",
+        other_info: "A grocery store near Monument, CO"
+    };
+    
+    beforeAll(async function(){
+        await locationStore.deleteAll();
+        await locationStore.create(sampleLoc)
+    });
 
-const sampleLoc: Location = {
-    name: "Sooper 77",
-    street_addr_1: "1070 Baptist Rd",
-    city: "Colorado Springs",
-    state: "CO",
-    zip: 80921,
-    country: "USA",
-    other_info: "A grocery store near Monument, CO"
-};
+    afterAll(async function(){
+        await locationStore.deleteAll();
+    });
 
-describe('Location model tests', () => {
     // READ tests
     it('Should have an index method', () => {
         expect(locationStore.index).toBeDefined();

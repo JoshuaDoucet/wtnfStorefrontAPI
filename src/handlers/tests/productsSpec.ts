@@ -10,75 +10,128 @@ import {Location, LocationStore} from '../../models/location'
 import {Material, MaterialStore} from '../../models/material'
 import utilities from '../../utilities/utilities'
 import {Color, ColorStore} from '../../models/color';
+import {User, UserStore} from '../../models/user';
 
 const request = supertest(app); 
 
-const productStore = new ProductStore();
-var coat: Product = {
-    name: "Columbia Blue Winter coat, Mens, XL",
-    price: 139.95,
-    cost: 89,
-    boh: 1,
-    for_sale: false,
-    category: "coats/Winter",
-    description: "A lightly used winter coat. Great in cold",
-    measurments: "Chest: 44 in, Waist: 32 in, Length: 33 in",
-    owner: "JD",
-    sku: "JD/M/TOP/0001",
-    size_family: "MENS",
-    size: "XL",
-    brand: "Columbia",
-    condition: "Used- Like New",
-    instructions: "Machine wash cold. Tumble dry low",
-    country_origin: "Thailand",
-    rn_num: "101654",
-    weight_grams: 978,
-    color_ids: ["1"]
-};
+fdescribe('Test products endpoint responses', () => {   
+    const productStore = new ProductStore();
+    var coat: Product = {
+        name: "Columbia Blue Winter coat, Mens, XL",
+        price: 139.95,
+        cost: 89,
+        boh: 1,
+        for_sale: false,
+        category: "coats/Winter",
+        description: "A lightly used winter coat. Great in cold",
+        measurments: "Chest: 44 in, Waist: 32 in, Length: 33 in",
+        owner: "JD",
+        sku: "JD/M/TOP/0001",
+        size_family: "MENS",
+        size: "XL",
+        brand: "Columbia",
+        condition: "Used- Like New",
+        instructions: "Machine wash cold. Tumble dry low",
+        country_origin: "Thailand",
+        rn_num: "101654",
+        weight_grams: 978,
+        color_ids: ["1"],
+    };
+    let prodId: string | undefined;
+    let product: Product;
 
-const locStore = new LocationStore();
-const loc: Location = {
-    name: "TestLocation",
-}
+    const locStore = new LocationStore();
+    const loc: Location = {
+        name: "TestLocation",
+    }
+    let location: Location;
+    let locationId: string;
 
-const colorStore = new ColorStore();
-const redColor: Color = {
-    name: "Red",
-    red: 255,
-    hex: "FF0000"
-};
+    const colorStore = new ColorStore();
+    const redColor: Color = {
+        name: "Red",
+        red: 255,
+        hex: "FF0000"
+    };
+    let color: Color;
+    let colorId: string | undefined;
 
-const materialStore = new MaterialStore();
-const velvet: Material = {
-    name: "Velvet"
-}
+    const greenColor: Color = {
+        name: "Green",
+    };
+    let color2: Color;
+    let color2Id: string | undefined;
 
-let prodId: string | undefined;
-let product: Product;
-let location: Location;
-let redColId: string | undefined
-let redColor2: Color;
-let velvetMat: Material;
-let velMatId: string | undefined;
+    const materialStore = new MaterialStore();
+    const velvet: Material = {
+        name: "Velvet"
+    }
+    let material: Material;
+    let materialId: string | undefined;
 
-/*
-// remove all products from table before any test and add 1 product
-beforeEach(async function(){
-    console.log("B4 EACH PRODUCTS")
-    redColor2 = await colorStore.create(redColor);
-    redColId = redColor2.id;
-    coat.color_ids = [`${redColId}`]
+    const silk: Material = {
+        name: "Silk"
+    }
+    let material2: Material;
+    let material2Id: string | undefined;
 
-    velvetMat = await materialStore.create(velvet);
-    velMatId = velvetMat.id;
+    const userStore = new UserStore();
+    const testUser: User = {
+        first_name: "Everly",
+        last_name: "Penelope",
+        password_hash: "sample432423dccc",
+        phone: 5552221678,
+        email: "everly.penelope@live.com",
+    }
+    let userJWT: string;
+    let userId: string | undefined;
+    let user: User;
 
-    await productStore.deleteAll();
-    product = await productStore.create(coat);
-    prodId = product.id;
-});
-*/
+    beforeAll(async function(){
+        // delete all users, add 1, get JWT for auth
+        userStore.deleteAll();
+        user = await userStore.create(testUser);
+        userId = user.id;
 
-describe('Test products endpoint responses', () => {    
+        const response = await request
+            .get(`/authenticate`)
+            .send({
+                email: testUser.email,
+                password: testUser.password_hash
+        });
+        userJWT = `Bearer ${response.body}`;
+
+        //delete colors, add 2, update coat with id
+        await colorStore.deleteAll();
+        color = await colorStore.create(redColor);
+        colorId = color.id;
+        color2 = await colorStore.create(greenColor);
+        color2Id = color2.id;
+        colorId = color.id;
+        coat.color_ids = [`${color.id}`]
+
+        //delete materials, add 2, update coat with id
+        material = await materialStore.create(velvet);
+        materialId = material.id;
+        material2 = await materialStore.create(silk);
+        material2Id = material2.id;
+        coat.material_ids = [`${material.id}`];
+    });
+
+    afterAll(async function(){
+        colorStore.deleteAll();
+        materialStore.deleteAll();
+        userStore.deleteAll();
+        productStore.deleteAll();
+    });
+
+    beforeEach(async function(){
+        //delete products, add 1
+        await productStore.deleteAll();
+        product = await productStore.create(coat);
+        prodId = product.id;
+    });
+
      it('index: GET /products', async(done) => {   
         const response = await request.get('/products');
         expect(response.status).toBe(200);         
@@ -100,6 +153,7 @@ describe('Test products endpoint responses', () => {
     it(`create: POST /products`, async(done) => {   
         const response = await request
             .post(`/products`)
+            .set('Authorization', userJWT)
             .send(coat);
         expect(response.status).toBe(200);      
         expect(response.body.name).toEqual(product.name);   
@@ -109,21 +163,19 @@ describe('Test products endpoint responses', () => {
     it(`destroy: DELETE /products/:id`, async(done) => {   
         const response = await request
             .delete(`/products/${prodId}`)
+            .set('Authorization', userJWT);
         expect(response.status).toBe(200);      
         expect(response.body.name).toEqual(product.name);   
         done();     
     })
 
-    /*
-  app.post('/products/:id/colors', addColor)
-  app.post('/products/:id/materials', addMaterial)
-    */
     it('addColor: POST /products/:id/colors', async(done) => {
         const response = await request
             .post(`/products/${prodId}/colors`)
-            .send({color_id: redColId})
+            .set('Authorization', userJWT)
+            .send({color_id: color2Id})
         expect(response.status).toBe(200)
-        expect(response.body.color_id).toEqual(redColId+'')
+        expect(response.body.color_id).toEqual(color2Id+'')
         expect(response.body.product_id).toEqual(prodId+'')
         done();
     })
@@ -131,9 +183,10 @@ describe('Test products endpoint responses', () => {
     it('addMaterial: POST /products/:id/materials', async(done) => {
         const response = await request
             .post(`/products/${prodId}/materials`)
-            .send({material_id: velMatId})
+            .set('Authorization', userJWT)
+            .send({material_id: material2Id})
         expect(response.status).toBe(200)
-        expect(response.body.materials_id).toEqual(velMatId+'')
+        expect(response.body.materials_id).toEqual(material2Id+'')
         expect(response.body.product_id).toEqual(prodId+'')
         done();
     })
@@ -153,7 +206,7 @@ describe('Test products endpoint responses', () => {
             .get(`/products/${prodId}/materials`)
         expect(response.status).toBe(200);    
         if(coat.material_ids){
-            expect((response.body)[0].id+'').toEqual(coat.material_ids[0]);   
+            expect((response.body)[0]+'').toEqual(coat.material_ids[0]);   
         }
         done();     
     })

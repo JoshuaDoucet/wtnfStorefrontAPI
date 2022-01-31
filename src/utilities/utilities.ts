@@ -19,10 +19,7 @@ const verifyAuthJWT = (req: Request, res: Response, next: NextFunction) => {
         const authHeader = req.headers.authorization
         if(authHeader){
             const token = authHeader.split(' ')[1]
-            console.log(token)
             const decoded = jwt.verify(token, process.env.JWT_SECRET as string)
-            console.log("Decoded");
-            console.log(decoded);
             next();
         }else{
             res.status(401)

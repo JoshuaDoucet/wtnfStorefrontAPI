@@ -36,7 +36,6 @@ beforeEach( async function() {
 
 describe('Test colors endpoint responses', () => {    
     beforeAll(async function(){
-        console.log("BEFORE ALL COLORS")
         userStore.deleteAll();
         let testUserA: User = {
             first_name: "Test",
