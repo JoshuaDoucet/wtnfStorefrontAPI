@@ -105,7 +105,6 @@ export class OrderStore {
         //    .query(sql, [userId])
         const productInCart = result.rows
         conn.release()
-        console.log(productInCart)
         return productInCart;
     }
 

@@ -11,20 +11,6 @@ import {User, UserStore} from '../../models/user'
 
 const request = supertest(app); 
 
-/*
-// remove all orders from table before any test and add 1 order
-beforeEach(async function(){
-    console.log("B4 EACH ORDERS")
-    await orderStore.deleteAll();
-    order = await orderStore.create(testOrd);
-    ordId = order.id;
-
-    await productStore.deleteAll();
-    shoeProd = await productStore.create(shoes);
-    shoeId = shoeProd.id;
-});
-*/
-
 describe('Test orders endpoint responses', () => {         
     const productStore = new ProductStore();
     var shoes: Product = {
@@ -55,7 +41,7 @@ describe('Test orders endpoint responses', () => {
     const testUser: User = {
         first_name: "Everly",
         last_name: "Penelope",
-        password_hash: "sample432423dccc",
+        password: "sample432423dccc",
         phone: 5552221678,
         email: "everly.penelope@live.com",
     }
@@ -78,7 +64,7 @@ describe('Test orders endpoint responses', () => {
             .get(`/authenticate`)
             .send({
                 email: testUser.email,
-                password: testUser.password_hash
+                password: testUser.password
         });
         userJWT = `Bearer ${response.body}`;
     })
@@ -146,6 +132,14 @@ describe('Test orders endpoint responses', () => {
     it(`getProducts: GET /orders/:id/products`, async(done) => {   
         const response = await request
             .get(`/orders/${ordId}/products`)
+            .set('Authorization', userJWT)
+        expect(response.status).toBe(200);    
+        done();     
+    })
+
+    it(`cart: GET /cart`, async(done) => {   
+        const response = await request
+            .get(`/cart`)
             .set('Authorization', userJWT)
         expect(response.status).toBe(200);    
         done();     

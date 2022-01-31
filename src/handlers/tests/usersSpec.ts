@@ -24,7 +24,7 @@ describe('Test users endpoint responses', () => {
     const testUser: User = {
         first_name: "Everly",
         last_name: "Penelope",
-        password_hash: "sample432423dccc",
+        password: "sample432423dccc",
         phone: 5552221678,
         email: "everly.penelope@live.com",
         location_id: "1"
@@ -36,7 +36,7 @@ describe('Test users endpoint responses', () => {
     const testUser2: User = {
         first_name: "Leroy",
         last_name: "Jenkins",
-        password_hash: "sfdsfklf",
+        password: "sfdsfklf",
         phone: 5551114444,
         email: "leroy.jenkins@live.com",
         location_id: "1"
@@ -59,7 +59,7 @@ describe('Test users endpoint responses', () => {
             .get(`/authenticate`)
             .send({
                 email: testUser.email,
-                password: testUser.password_hash
+                password: testUser.password
         });
          userJWT = `Bearer ${response.body}`;
     });
@@ -108,7 +108,7 @@ describe('Test users endpoint responses', () => {
             .get(`/authenticate`)
             .send({
                 email: testUser.email,
-                password: testUser.password_hash
+                password: testUser.password
             })
         expect(response.status).toBe(200);      
         done();     

@@ -1,0 +1,109 @@
+
+> storefront_backend@0.1.0 test
+> tsc && ENV=test db-migrate --env test up && ENV=test jasmine && db-migrate db:drop test
+
+[INFO] No migrations to run
+[INFO] Done
+Jasmine started
+starting app on: 0.0.0.0:3000
+
+  Test colors endpoint responses
+    [32m✓ index: GET /colors[39m
+    [32m✓ show: GET /colors/:id[39m
+    [32m✓ create: POST /colors[39m
+    [32m✓ destroy: DELETE /colors/:id[39m
+
+  Test locations endpoint responses
+    [32m✓ index: GET /locations[39m
+    [32m✓ show: GET /locations/:id[39m
+    [32m✓ create: POST /locations[39m
+    [32m✓ destroy: DELETE /locations/:id[39m
+
+  Test materials endpoint responses
+    [32m✓ index: GET /materials[39m
+    [32m✓ show: GET /materials/:id[39m
+    [32m✓ create: POST /materials[39m
+    [32m✓ destroy: DELETE /materials/:id[39m
+
+  Test orders endpoint responses
+    [32m✓ index: GET /orders[39m
+    [32m✓ show: GET /orders/:id[39m
+    [32m✓ create: POST /orders[39m
+    [32m✓ destroy: DELETE /orders/:id[39m
+    [32m✓ addProduct: POST /orders/:id/products[39m
+    [32m✓ getProducts: GET /orders/:id/products[39m
+    [32m✓ cart: GET /cart[39m
+
+  Test products endpoint responses
+    [32m✓ index: GET /products[39m
+    [32m✓ show: GET /products/:id[39m
+    [32m✓ create: POST /products[39m
+    [32m✓ destroy: DELETE /products/:id[39m
+    [32m✓ addColor: POST /products/:id/colors[39m
+    [32m✓ addMaterial: POST /products/:id/materials[39m
+    [32m✓ getColors: GET /products/:id/colors[39m
+    [32m✓ getMaterials: GET /products/:id/materials[39m
+
+  Test users endpoint responses
+    [32m✓ index: GET /users[39m
+    [32m✓ show: GET /users/:id[39m
+    [32m✓ create: POST /users[39m
+    [32m✓ destroy: DELETE /users/:id[39m
+    [32m✓ authenticate: GET /authenticate[39m
+
+  Color model tests
+    [32m✓ Should have an index method[39m
+    [32m✓ index should return a list of 1 color[39m
+    [32m✓ Should have an show method[39m
+    [32m✓ Should have a create method[39m
+    [32m✓ Should add blue color to the colors table[39m
+    [32m✓ Should have a delete method[39m
+    [32m✓ delete should remove a color from the colors table[39m
+
+  Location model tests
+    [32m✓ Should have an index method[39m
+    [32m✓ index should return a list of 1 location[39m
+    [32m✓ Should have a show method[39m
+    [32m✓ Should have a create method[39m
+    [32m✓ Should add sample location to the locations table[39m
+    [32m✓ Should have a delete method[39m
+    [32m✓ delete should remove a location from the locations table[39m
+
+  Material model tests
+    [32m✓ Should have an index method[39m
+    [32m✓ index should return a list with 1 material[39m
+    [32m✓ Should have an show method[39m
+    [32m✓ Should have a create method[39m
+    [32m✓ Should add brown leather material to the materials table[39m
+    [32m✓ Should have a delete method[39m
+    [32m✓ delete should remove a material from the materials table[39m
+
+  Order model tests
+    [32m✓ Should have an index method[39m
+    [32m✓ index should return a list of 1 order[39m
+    [32m✓ Should have a show method[39m
+    [32m✓ Should have a create method[39m
+    [32m✓ Should add sample order to the orders table[39m
+    [32m✓ Should have a delete method[39m
+    [32m✓ delete should remove an order from the orders table[39m
+
+  Product model tests
+    [32m✓ Should have an index method[39m
+    [32m✓ index should return a list of 1 product[39m
+    [32m✓ Should have a show method[39m
+    [32m✓ Should have a create method[39m
+    [32m✓ Should add sample product to the products table[39m
+    [32m✓ Should have a delete method[39m
+    [32m✓ delete should remove a product from the products table[39m
+
+  User model tests
+    [32m✓ Should have an index method[39m
+    [32m✓ index should return a list of 1 user[39m
+    [32m✓ Should have a show method[39m
+    [32m✓ Should have a create method[39m
+    [32m✓ Should add sample user to the users table[39m
+    [32m✓ Should have a delete method[39m
+    [32m✓ delete should remove a user from the users table[39m
+
+Executed 74 of 74 specs[32m SUCCESS[39m in 4 secs.
+[INFO] Deleted database "test"

@@ -79,7 +79,7 @@ describe('Test products endpoint responses', () => {
     const testUser: User = {
         first_name: "Everly",
         last_name: "Penelope",
-        password_hash: "sample432423dccc",
+        password: "sample432423dccc",
         phone: 5552221678,
         email: "everly.penelope@live.com",
     }
@@ -97,7 +97,7 @@ describe('Test products endpoint responses', () => {
             .get(`/authenticate`)
             .send({
                 email: testUser.email,
-                password: testUser.password_hash
+                password: testUser.password
         });
         userJWT = `Bearer ${response.body}`;
 

@@ -45,7 +45,7 @@ const create = async (req: Request, res: Response) => {
         const user: User = {
             first_name: req.body.first_name,
             last_name: req.body.last_name,
-            password_hash: req.body.password_hash,
+            password: req.body.password,
             phone: req.body.phone,
             email: req.body.email,
             location_id: req.body.location_id,

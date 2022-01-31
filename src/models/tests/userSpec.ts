@@ -12,7 +12,7 @@ describe('User model tests', () => {
     var testUser: User = {
         first_name: "Everly",
         last_name: "Penelo",
-        password_hash: "sampleHash4432423dccc",
+        password: "sampleHash4432423dccc",
         phone: 5552221678,
         email: "iceandfire@google.com",
         location_id: "1"
@@ -70,9 +70,12 @@ describe('User model tests', () => {
         expect(copyResult.first_name).toEqual(testUser.first_name);
         expect(copyResult.last_name).toEqual(testUser.last_name);
         // Input password should not equal pass in DB
-        expect(copyResult.password_hash).not.toEqual(testUser.password_hash);
+        expect(copyResult.password_hash).not.toEqual(testUser.password);
         // Test password hashing
-        const authUser = userStore.authenticate(testUser.email, testUser.password_hash);
+        if(testUser.password)
+            var authUser = userStore.authenticate(testUser.email, testUser.password);
+        else
+            throw new Error("ERR - testUser.password not defined")
         expect(typeof authUser).toEqual(typeof copyResult)
         expect(copyResult.phone+'').toEqual(testUser.phone+'');
         expect(copyResult.email).toEqual(testUser.email);

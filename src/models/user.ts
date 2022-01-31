@@ -10,7 +10,8 @@ export type User = {
     id?: string,
     first_name: string,
     last_name: string,
-    password_hash: string,
+    password?: string,
+    password_hash?: string,
     phone?: number,
     email: string,
     location_id?: string
@@ -53,9 +54,13 @@ export class UserStore {
     async create(user: User): Promise<User> {
         try {
             //Hash password before storing
-            const password_hash = bcrypt.hashSync(user.password_hash 
-                + BCRYPT_PEPPER, parseInt(BCRYPT_SALT as string))
-            
+            if(user.password){
+                var password_hash = bcrypt.hashSync(user.password 
+                    + BCRYPT_PEPPER, parseInt(BCRYPT_SALT as string))
+            }else{
+                throw new Error(`Could not add user ${user.email}. Error: password undefined`)
+            }
+
             const sql = 'INSERT INTO users (first_name, last_name, password_hash, '
                 + ' phone, email, location_id) '
                 + 'VALUES($1, $2, $3, $4, $5, (SELECT id from locations WHERE id=$6)) RETURNING *';
@@ -70,7 +75,7 @@ export class UserStore {
             connect.release()
             return addedUser 
         } catch (error) {
-            throw new Error(`Could not add use ${user.email}. Error: ${error}`)
+            throw new Error(`Could not add user ${user.email}. Error: ${error}`)
         }
     }
 
