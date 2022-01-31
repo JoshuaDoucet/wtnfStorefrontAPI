@@ -1,12 +1,49 @@
 // orders.ts
 
 // handler for orders
-
+import jwt from 'jsonwebtoken'
 import express, { Request, Response } from 'express'
 import { Order, OrderStore } from '../models/order'
 import utilities from '../utilities/utilities';
 
 const store = new OrderStore();
+
+// /cart [GET]
+const cart = async (_req: Request, res: Response) => {
+    try{
+        const token = (_req.headers.authorization)?.split(' ')[1];
+        console.log(token)
+        if(token){
+            const payload = jwt.decode(token);
+            console.log(payload)
+            if(payload != null && typeof payload === 'object'){
+                if('user' in payload){
+                    var user = payload.user;
+                    if('id' in user){
+                        var userId = user.id
+                        const cart = await store.cart(userId)
+                        res.json(cart);
+                    }else{
+                        res.status(401)
+                        res.json("Invalid data. Auth token needs user id. Cannot view cart. Attempt to sign in");        
+                    }
+                }else{
+                    res.status(401)
+                    res.json("Invalid data. Auth token needs user object. Cannot view cart. Attempt to sign in");    
+                }
+            }else{
+                res.status(401)
+                res.json("No payload info in auth token. Cannot view cart. Attempt to sign in");
+            }              
+        }else{
+            res.status(401)
+            res.json("No auth token provided. Cannot view cart. Please sign in");
+        }
+    }catch(err){
+        res.status(503);
+        res.json(`Cannot GET cart for user. ERR -- ${err}`);
+    }
+}
 
 // /orders [GET]
 const index = async (_req: Request, res: Response) => {
@@ -98,6 +135,7 @@ const destroy = async (req: Request, res: Response) => {
 
 // Routes to connect the Express application to products data
 const orderRoutes = (app: express.Application) => {
+  app.get('/cart', utilities.verifyAuthJWT, cart)
   app.get('/orders', utilities.verifyAuthJWT, index)
   app.get('/orders/:id', utilities.verifyAuthJWT, show)
   app.get('/orders/:id/products', utilities.verifyAuthJWT, getProducts)

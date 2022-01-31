@@ -86,6 +86,23 @@ export class OrderStore {
         }
     }
 
+    // get shopping cart for given user
+    async cart(userId: string): Promise<object> {
+        const sql = 'SELECT (products.id, products.name, order_products.product_quantity, '
+                    + 'order_products.user_id, order_products.order_id, orders.status) '
+                    + 'FROM products INNER JOIN order_products '
+                    + 'ON order_products.product_id = products.id '
+                    + 'AND order_products.order_id = orders.id '
+                    + "WHERE orders.status='active'"
+                    + "AND orders.user_id=($1)";
+        const conn = await Client.connect()
+        const result = await conn
+            .query(sql, [userId])
+        const productInCart = result.rows
+        conn.release()
+        return productInCart;
+    }
+
       // get order productIDs
       async getProducts(orderId: string):Promise<string[]> {
         const sql = 'SELECT products.id, products.name, product_quantity FROM products '
