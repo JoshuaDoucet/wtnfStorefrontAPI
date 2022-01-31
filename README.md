@@ -21,8 +21,8 @@ This repo acts as the backend to interact with the WTNF database of products, lo
 ### Visit the application endpoints
 * Login to the storefront. 
   This is required to access msot of the application data
- - [GET] /authenticate
-   - HTTP request body
+ - [GET] /authenticate 
+   - HTTP request body <br>
      ```json
      {
          "email": "josh@gmail.com",
@@ -37,7 +37,7 @@ This repo acts as the backend to interact with the WTNF database of products, lo
  - [GET] /colors/:id
    - show - the response is a single color that matches the specified id
  - [POST] /colors (AUTH TOKEN)
-   - create - adds new color to database
+   - create - adds new color to database<br>
      HTTP request body
      ```json
      {
@@ -55,7 +55,7 @@ This repo acts as the backend to interact with the WTNF database of products, lo
  - [GET] /locations/:id (AUTH TOKEN)
    - show - the response is a single location that matches the specified id
  - [POST] /locations (AUTH TOKEN)
-   - create - adds new location to database
+   - create - adds new location to database <br>
      HTTP request body
      ```json
      {
