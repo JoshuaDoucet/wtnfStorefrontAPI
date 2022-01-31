@@ -12,10 +12,8 @@ const store = new OrderStore();
 const cart = async (_req: Request, res: Response) => {
     try{
         const token = (_req.headers.authorization)?.split(' ')[1];
-        console.log(token)
         if(token){
             const payload = jwt.decode(token);
-            console.log(payload)
             if(payload != null && typeof payload === 'object'){
                 if('user' in payload){
                     var user = payload.user;

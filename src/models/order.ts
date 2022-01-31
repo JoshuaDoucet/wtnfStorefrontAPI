@@ -88,18 +88,24 @@ export class OrderStore {
 
     // get shopping cart for given user
     async cart(userId: string): Promise<object> {
-        const sql = 'SELECT (products.id, products.name, order_products.product_quantity, '
-                    + 'order_products.user_id, order_products.order_id, orders.status) '
+        const sql = 'SELECT products.id, products.name, order_products.product_quantity, '
+                    + 'orders.user_id, orders.id, orders.status '
                     + 'FROM products INNER JOIN order_products '
                     + 'ON order_products.product_id = products.id '
-                    + 'AND order_products.order_id = orders.id '
+                    + 'INNER JOIN orders ON order_products.order_id = orders.id '
                     + "WHERE orders.status='active'"
-                    + "AND orders.user_id=($1)";
+                    + "AND orders.user_id=(SELECT id FROM users WHERE id=($1))";
+        const query = {
+            text: sql,
+            values: [userId]
+        }
         const conn = await Client.connect()
-        const result = await conn
-            .query(sql, [userId])
+        const result = await conn.query(query);
+        //const result = await conn
+        //    .query(sql, [userId])
         const productInCart = result.rows
         conn.release()
+        console.log(productInCart)
         return productInCart;
     }
 
