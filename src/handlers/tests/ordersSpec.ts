@@ -13,7 +13,7 @@ const request = supertest(app);
 
 describe('Test orders endpoint responses', () => {         
     const productStore = new ProductStore();
-    var shoes: Product = {
+    let shoes: Product = {
         name: "Sample Shoe Size 12 Mens Red",
         price: 110.95,
         cost: 11,

@@ -88,36 +88,44 @@ export class OrderStore {
 
     // get shopping cart for given user
     async cart(userId: string): Promise<object> {
-        const sql = 'SELECT products.id, products.name, order_products.product_quantity, '
-                    + 'orders.user_id, orders.id, orders.status '
-                    + 'FROM products INNER JOIN order_products '
-                    + 'ON order_products.product_id = products.id '
-                    + 'INNER JOIN orders ON order_products.order_id = orders.id '
-                    + "WHERE orders.status='active'"
-                    + "AND orders.user_id=(SELECT id FROM users WHERE id=($1))";
-        const query = {
-            text: sql,
-            values: [userId]
+        try{
+            const sql = 'SELECT products.id, products.name, order_products.product_quantity, '
+            + 'orders.user_id, orders.id, orders.status '
+            + 'FROM products INNER JOIN order_products '
+            + 'ON order_products.product_id = products.id '
+            + 'INNER JOIN orders ON order_products.order_id = orders.id '
+            + "WHERE orders.status='active'"
+            + "AND orders.user_id=(SELECT id FROM users WHERE id=($1))";
+            const query = {
+                text: sql,
+                values: [userId]
+            }
+            const conn = await Client.connect()
+            const result = await conn.query(query);
+            //const result = await conn
+            //    .query(sql, [userId])
+            const productInCart = result.rows
+            conn.release()
+            return productInCart;
+        }catch(error){
+            throw new Error(`Could not get cart details for user with id: ${userId}`);
         }
-        const conn = await Client.connect()
-        const result = await conn.query(query);
-        //const result = await conn
-        //    .query(sql, [userId])
-        const productInCart = result.rows
-        conn.release()
-        return productInCart;
     }
 
       // get order productIDs
       async getProducts(orderId: string):Promise<string[]> {
-        const sql = 'SELECT products.id, products.name, product_quantity FROM products '
+        try{
+            const sql = 'SELECT products.id, products.name, product_quantity FROM products '
             + 'INNER JOIN order_products ON order_products.order_id=($1) ';
-        const conn = await Client.connect()
-        const result = await conn
-            .query(sql, [orderId])
-        const productsInOrder = result.rows
-        conn.release()
-        return productsInOrder;
+            const conn = await Client.connect()
+            const result = await conn
+                .query(sql, [orderId])
+            const productsInOrder = result.rows
+            conn.release()
+            return productsInOrder;
+        }catch(error){
+            throw new Error(`Could not get products for order with id: ${orderId}` );
+        }
     }
 
     // addProduct to order

@@ -11,7 +11,7 @@ import utilities from '../../utilities/utilities'
 
 describe('Product model tests', () => {
     const productStore = new ProductStore();
-    var jacket: Product = {
+    let jacket: Product = {
         name: "Columbia Blue/Gray Winter Jacket, Mens, XL",
         price: 139.95,
         cost: 89,
@@ -34,30 +34,30 @@ describe('Product model tests', () => {
         material_ids: ["1"],
         location_id: "1"
     };
-    var jacketId: string | undefined;
+    let jacketId: string | undefined;
 
     const colorStore = new ColorStore();
-    var orangeColor: Color = {
+    let orangeColor: Color = {
         name: "Orange"
     }
-    var orangeId: string | undefined;
-    var pinkColor: Color = {
+    let orangeId: string | undefined;
+    let pinkColor: Color = {
         name: "Pink"
     }
-    var pinkId: string | undefined;
+    let pinkId: string | undefined;
 
     const materialStore = new MaterialStore();
-    var silkMaterial: Material = {
+    let silkMaterial: Material = {
         name: "Silk"
     }
-    var materialId: string | undefined;
+    let materialId: string | undefined;
 
     const locationStore = new LocationStore();
-    var testLocation: Location = {
+    let testLocation: Location = {
         name: "Test Location",
         zip: 80922
     }
-    var locationId : string | undefined;
+    let locationId : string | undefined;
     
     beforeAll(async function () {
         // Create sample objects that product shou;d relate to

@@ -37,7 +37,7 @@ const show = async (req: Request, res: Response) => {
 
 // /locations [PUT]
 const create = async (req: Request, res: Response) => {
-    var locName: string | undefined;
+    let locName: string | undefined;
     try {
         // Pull value for error handling
         locName = req.body.name;

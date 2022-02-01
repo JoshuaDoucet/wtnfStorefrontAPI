@@ -38,7 +38,7 @@ const show = async (req: Request, res: Response) => {
 
 // /users [POST]
 const create = async (req: Request, res: Response) => {
-    var userName: string | undefined;
+    let userName: string | undefined;
     try {
         // Pull value for error handling
         userName = req.body.name;
@@ -52,7 +52,7 @@ const create = async (req: Request, res: Response) => {
         };
         const newUser = await store.create(user);
         // Sign new JWT after successful user creation
-        var token = jwt.sign({ user: newUser },
+        let token = jwt.sign({ user: newUser },
              (process.env.JWT_SECRET as string),
              { expiresIn: '1h' });
         res.json(token);
@@ -82,7 +82,7 @@ const destroy = async (req: Request, res: Response) => {
 const authenticate = async (req: Request, res: Response) => {
     try {
         const authUser = await store.authenticate(req.body.email, req.body.password)
-        var token = jwt.sign({ user: authUser }, 
+        let token = jwt.sign({ user: authUser }, 
             (process.env.JWT_SECRET as string),
             { expiresIn: '1h' });
         res.json(token)

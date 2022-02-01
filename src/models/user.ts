@@ -53,9 +53,10 @@ export class UserStore {
     // CREATE a user row
     async create(user: User): Promise<User> {
         try {
+            let password_hash: string;
             //Hash password before storing
             if(user.password){
-                var password_hash = bcrypt.hashSync(user.password 
+                password_hash = bcrypt.hashSync(user.password 
                     + BCRYPT_PEPPER, parseInt(BCRYPT_SALT as string))
             }else{
                 throw new Error(`Could not add user ${user.email}. Error: password undefined`)

@@ -17,7 +17,7 @@ const request = supertest(app);
 describe('Test products endpoint responses', () => {   
     const productStore = new ProductStore();
 
-    var coat: Product = {
+    let coat: Product = {
         name: "Columbia Blue Winter coat, Mens, XL",
         price: 139.95,
         cost: 89,

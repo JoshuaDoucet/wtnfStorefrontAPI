@@ -37,7 +37,7 @@ const show = async (req: Request, res: Response) => {
 
 // /materials [POST]
 const create = async (req: Request, res: Response) => {
-    var matName: string | undefined;
+    let matName: string | undefined;
     try {
         // Pull value for error handling
         matName = req.body.name;

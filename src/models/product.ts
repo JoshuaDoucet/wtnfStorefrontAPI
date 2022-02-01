@@ -67,8 +67,8 @@ export class ProductStore {
             const result = await connect.query(sql);
             connect.release();
             // add color_ids and materials_ids to Product objects
-            var products: Product[] = result.rows;
-            for(var i = 0; i < products.length; i++){
+            let products: Product[] = result.rows;
+            for(let i = 0; i < products.length; i++){
                 if(products[i].id){
                     products[i].color_ids = await 
                         this.getColors((products[i].id as unknown) as string);
@@ -90,7 +90,7 @@ export class ProductStore {
             const sql = "SELECT * FROM products WHERE id=($1)";
             const result = await connect.query(sql, [id]);
             connect.release();
-            var product = result.rows[0];
+            let product = result.rows[0];
             
             product.color_ids = await this.getColors(id);
             product.material_ids = await this.getMaterials(id);
@@ -129,14 +129,14 @@ export class ProductStore {
             
             // link color IDs to product
             if(product.color_ids){
-                for(var i = 0; i < product.color_ids.length; i++){
+                for(let i = 0; i < product.color_ids.length; i++){
                     await this.addColor(product.color_ids[i], productId);
                 }
             }
 
             // link material IDs to product
             if(product.material_ids){
-                for(var i = 0; i <= product.material_ids.length; i++){
+                for(let i = 0; i <= product.material_ids.length; i++){
                     await this.addMaterial(product.material_ids[i], productId);
                 }
             }
@@ -220,16 +220,20 @@ export class ProductStore {
 
     // get product material IDs
     async getMaterials(productId: string):Promise<string[]> {
-        const sql = 'SELECT materials.id FROM materials '
+        try{
+            const sql = 'SELECT materials.id FROM materials '
             + 'INNER JOIN product_materials ON product_materials.product_id=($1) '
             + 'AND product_materials.materials_id=materials.id';
-        const conn = await Client.connect()
-        const result = await conn
-            .query(sql, [productId])
-        const materialIds = result.rows
-        const idArray = this.normalizeIdResults(materialIds);
-        conn.release()
-        return idArray
+            const conn = await Client.connect()
+            const result = await conn
+                .query(sql, [productId])
+            const materialIds = result.rows
+            const idArray = this.normalizeIdResults(materialIds);
+            conn.release()
+            return idArray
+        }catch(error){
+            throw new Error(`Could not get product matterial. Error: ${error}`)
+        }
     }
 
 
@@ -266,26 +270,20 @@ export class ProductStore {
 
     // get product color IDs
     async getColors(productId: string):Promise<string[]> {
-        const sql = 'SELECT colors.id FROM colors '
-            + 'INNER JOIN product_colors ON product_colors.product_id=($1) '
-            + 'AND product_colors.color_id=colors.id';
-        const conn = await Client.connect()
-        const result = await conn
-            .query(sql, [productId])
-        const colorIds = result.rows
-        const idArray = this.normalizeIdResults(colorIds);
-        conn.release()
-        return idArray
-    }
-
-    // remove the id value from a list of rows, and add them to a string[]
-    normalizeIdResults = (rows: {id: number}[]): string[] => {
-        let resultIds: string[] = [];
-        for(let i = 0; i < rows.length; i++){
-            let value = rows[i].id.toString();
-            resultIds.push(value);
+        try{
+            const sql = 'SELECT colors.id FROM colors '
+                + 'INNER JOIN product_colors ON product_colors.product_id=($1) '
+                + 'AND product_colors.color_id=colors.id';
+            const conn = await Client.connect()
+            const result = await conn
+                .query(sql, [productId])
+            const colorIds = result.rows
+            const idArray = this.normalizeIdResults(colorIds);
+            conn.release()
+            return idArray
+        }catch(error){
+            throw new Error(`Could not get product matterial. Error: ${error}`)
         }
-        return resultIds;
     }
 
     // addColor to product
@@ -317,5 +315,15 @@ export class ProductStore {
         } catch (err) {
             throw new Error(`Could not delete colors from product ID ${productId}. Error: ${err}`)
         }
+    }
+
+    // remove the id value from a list of rows, and add them to a string[]
+    normalizeIdResults = (rows: {id: number}[]): string[] => {
+        let resultIds: string[] = [];
+        for(let i = 0; i < rows.length; i++){
+            let value = rows[i].id.toString();
+            resultIds.push(value);
+        }
+        return resultIds;
     }
 }

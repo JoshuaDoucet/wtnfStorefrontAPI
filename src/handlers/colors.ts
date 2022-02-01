@@ -37,7 +37,7 @@ const show = async (req: Request, res: Response) => {
 
 // /colors [POST]
 const create = async (req: Request, res: Response) => {
-    var colorName: string | undefined;
+    let colorName: string | undefined;
     try {
         // Pull value for error handling
         colorName = req.body.name;

@@ -9,7 +9,7 @@ import bcrypt from 'bcrypt'
 
 describe('User model tests', () => {
     const userStore = new UserStore();
-    var testUser: User = {
+    let testUser: User = {
         first_name: "Everly",
         last_name: "Penelo",
         password: "sampleHash4432423dccc",
@@ -17,14 +17,14 @@ describe('User model tests', () => {
         email: "iceandfire@google.com",
         location_id: "1"
     }
-    var userId : string | undefined;
+    let userId : string | undefined;
 
     const locationStore = new LocationStore();
-    var testLocation: Location = {
+    let testLocation: Location = {
         name: "Test Location",
         zip: 80922
     }
-    var locationId : string | undefined;
+    let locationId : string | undefined;
     
     beforeAll(async function () {
         await locationStore.deleteAll();
@@ -72,10 +72,7 @@ describe('User model tests', () => {
         // Input password should not equal pass in DB
         expect(copyResult.password_hash).not.toEqual(testUser.password);
         // Test password hashing
-        if(testUser.password)
-            var authUser = userStore.authenticate(testUser.email, testUser.password);
-        else
-            throw new Error("ERR - testUser.password not defined")
+        let authUser = userStore.authenticate(testUser.email, testUser.password +'');
         expect(typeof authUser).toEqual(typeof copyResult)
         expect(copyResult.phone+'').toEqual(testUser.phone+'');
         expect(copyResult.email).toEqual(testUser.email);
