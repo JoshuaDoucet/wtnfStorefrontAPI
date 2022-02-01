@@ -8,19 +8,32 @@ This repo acts as the backend to interact with the WTNF database of products, lo
 * Built and tested using
   - Node.js v15.13.2
   - npm v8.1.2
+  - PostgreSQL 12 database server    
+  - a git client
   - a linux command line interface
 ### Get the application code
 * Clone this repo or download the package .zip
+  - Find a usable directory on your system and run ```git init```
   - At the CLI run ```git clone https://github.com/JoshuaDoucet/wtnfStorefront.git main```
-* Navigate to the root project directory
+* Navigate to the main root project directory ```cd main```
 * Install external modules using npm
   - At thhe CLI run ```npm install```
 ### Get the postgres database up and running
 * Setup the database
   - Update the postgres database environment variables with valid DB credentials in the .env file
-  - Create the database.json file need for migrations.
+  - Create the database.json file need for migrations. This will also compile the src TS code to JS.
     ```npm run setupdb``` 
-  - TODO
+  - Login to the postgres user with sudo
+    ```sudo su - postgres```
+  - Open psql and create a dev DB and a test DB with a new user. Names with brackets around them should be deleted (as well as the brackets) and replaced with the corresponding .env variable values.
+    ```psql postgres```
+    ```CREATE DATABASE <POSTGRES_DB>;```
+    ```CREATE DATABASE <POSTGRES_TEST_DB>;```
+    ```CREATE USER <POSTGRES_USER> WITH PASSWORD '<POSTGRES_PASSWORD>';
+    ```\c <POSTGRES_DB>;```
+    ```GRANT ALL PRIVILEGES ON DATABASE <POSTGRES_DB> TO <POSTGRES_USER>;
+    ```\c <POSTGRES_TEST_DB>;```
+    ```GRANT ALL PRIVILEGES ON DATABASE <POSTGRES_TEST_DB> TO <POSTGRES_USER>;
 ### Run the Express web server
 * Run the web server
   - At the CLI run ```npm run watch``` or ```npm run start```
