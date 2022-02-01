@@ -1,5 +1,6 @@
 // product.ts
 
+import { QueryResult } from 'pg';
 import Client from '../database'
 
 // Model for products
@@ -10,7 +11,7 @@ export type Product = {
     name: string,
     price: number,
     cost?: number,
-    boh?: number,
+    boh?: number, // balance on hand
     for_sale: boolean,
     category?: string,
     description?: string,
@@ -30,6 +31,31 @@ export type Product = {
     material_ids?: string[] // materialsID array
 }
 
+// Product type for updating
+// Similar to Product but with optional fields for updating Product row
+// id is required
+export type ProductUpdate = {
+    id: string,
+    name?: string,
+    price?: number,
+    cost?: number,
+    boh?: number,
+    for_sale?: boolean,
+    category?: string,
+    description?: string,
+    measurments?: string,
+    owner?: string,
+    sku?: string,
+    size_family?: string,
+    size?: string,
+    brand?: string,
+    condition?: string,
+    instructions?: string,
+    country_origin?: string,
+    rn_num?: string, 
+    weight_grams?: number
+    location_id?: string, 
+}
 
 // Class to interact with the products, product_materials, and product_colors tables
 export class ProductStore {
@@ -124,6 +150,37 @@ export class ProductStore {
             throw new Error(`Could not add product ${product.name}. Error: ${error}`)
         }
     }
+
+     // UPDATE a product row
+     async update(product: ProductUpdate): Promise<Product> {
+        try {
+            const connect = await Client.connect()
+            // update values provided in product
+            let key: keyof typeof product;
+            for (key in product) {
+                if(product[key] != undefined){
+                    const sql = 'UPDATE products '
+                        + `SET ${key} = ($1) `
+                        + 'WHERE id = ($2) RETURNING *';
+                    const query = {
+                        text: sql,
+                        values: [product[key], product.id]
+                    }
+                    await connect.query(query);
+                }
+            }
+            connect.release()
+            if(product.id){
+                const result = this.show(product.id);
+                return result;
+            }else{
+                throw new Error('product.id is undefined.');
+            }
+        } catch (error) {
+            throw new Error(`Could not update product ${product.id}. Error: ${error}`)
+        }
+    }
+
 
     // DELETE a product row
     async delete(id: string): Promise<Product> {

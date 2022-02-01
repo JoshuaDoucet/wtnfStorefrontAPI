@@ -16,6 +16,7 @@ const request = supertest(app);
 
 describe('Test products endpoint responses', () => {   
     const productStore = new ProductStore();
+
     var coat: Product = {
         name: "Columbia Blue Winter coat, Mens, XL",
         price: 139.95,
@@ -157,6 +158,21 @@ describe('Test products endpoint responses', () => {
             .send(coat);
         expect(response.status).toBe(200);      
         expect(response.body.name).toEqual(product.name);   
+        done();     
+    })
+
+    it(`update: PUT /products/:id`, async(done) => {  
+        const updateDetails = {
+            size: "XXL",
+            owner: "Jane Doe"
+        } 
+        const response = await request
+            .put(`/products/${prodId}`)
+            .set('Authorization', userJWT)
+            .send(updateDetails);
+        expect(response.status).toBe(200);      
+        expect(response.body.size).toEqual(updateDetails.size); 
+        expect(response.body.name).toEqual(product.name);     
         done();     
     })
 

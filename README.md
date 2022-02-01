@@ -168,6 +168,16 @@ This repo acts as the backend to interact with the WTNF database of products, lo
           "materials_id": "3"
       }
      ```
+ - [PUT] /products/:id (AUTH TOKEN)
+   - update - updates a product with specified id using the request body JSON to update specified values. Returned the updated product from the db table
+     HTTP request body. Only the columns in the request body will be updated in the product with specified id.
+     ```json
+      {
+        "price": 119.99,
+        "category": "Shoes",
+        "size": "13"
+      }
+     ```
  - [DELETE] /products/:id (AUTH TOKEN)
    - delete - deletes the product specified by id from the database. Response returns the product row being deleted.
 
@@ -235,6 +245,8 @@ This repo acts as the backend to interact with the WTNF database of products, lo
   - ```src/test/JASMINE_TEST_RESULTS.txt```
 * To run the tests, in a terminal navigate to the project base directory and run
   - ```npm run test```
+* To run and save the test results in the about txt file run
+  - ```npm run test-save```
 
 ## Technologies Used
 The WTNF Storefront application utilizes the following technologies:

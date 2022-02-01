@@ -1,9 +1,3 @@
-
-> storefront_backend@0.1.0 test
-> tsc && ENV=test db-migrate --env test up && ENV=test jasmine && db-migrate db:drop test
-
-[INFO] No migrations to run
-[INFO] Done
 Jasmine started
 starting app on: 0.0.0.0:3000
 
@@ -38,6 +32,7 @@ starting app on: 0.0.0.0:3000
     [32m✓ index: GET /products[39m
     [32m✓ show: GET /products/:id[39m
     [32m✓ create: POST /products[39m
+    [32m✓ update: PUT /products/:id[39m
     [32m✓ destroy: DELETE /products/:id[39m
     [32m✓ addColor: POST /products/:id/colors[39m
     [32m✓ addMaterial: POST /products/:id/materials[39m
@@ -101,6 +96,8 @@ starting app on: 0.0.0.0:3000
     [32m✓ Should have a show method[39m
     [32m✓ Should have a create method[39m
     [32m✓ Should add sample product to the products table[39m
+    [32m✓ Should have an update method[39m
+    [32m✓ Should update sample product in the products table[39m
     [32m✓ Should have a delete method[39m
     [32m✓ delete should remove a product from the products table[39m
     [32m✓ Should have a deletAll method[39m
@@ -117,5 +114,4 @@ starting app on: 0.0.0.0:3000
     [32m✓ Should have a deletAll method[39m
     [32m✓ deleteAll should return a value that is defined[39m
 
-Executed 86 of 86 specs[32m SUCCESS[39m in 4 secs.
-[INFO] Deleted database "test"
+Executed 89 of 89 specs[32m SUCCESS[39m in 4 secs.

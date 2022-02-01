@@ -5,7 +5,7 @@
 // TODO
 
 import express, { Request, Response } from 'express'
-import { Product, ProductStore } from '../models/product'
+import { Product, ProductStore, ProductUpdate } from '../models/product'
 import utilities from '../utilities/utilities';
 
 const store = new ProductStore();
@@ -72,6 +72,41 @@ const create = async (req: Request, res: Response) => {
     } catch(error) {
         res.status(400);
         res.json(`Product name [${prodName}] not added. ERR -- ${error}`);
+    }
+}
+
+// /products/:id [PUT]
+const update = async (req: Request, res: Response) => {
+    var prodName: string | undefined;
+    try {
+        const product: ProductUpdate = {
+            id: req.params.id,
+            name: req.body.name,
+            price: req.body.price,
+            cost: req.body.cost,
+            boh: req.body.boh,
+            for_sale: req.body.for_sale,
+            category: req.body.category,
+            description: req.body.description,
+            measurments: req.body.measurments,
+            owner: req.body.owner,
+            sku: req.body.sku,
+            size_family: req.body.size_family,
+            size: req.body.size,
+            brand: req.body.brand,
+            condition: req.body.condition,
+            instructions: req.body.instructions,
+            country_origin: req.body.country_origin,
+            rn_num: req.body.rn_num,
+            weight_grams: req.body.weight_grams,
+            location_id: req.body.location_id,
+        };
+        // update product
+        const updateProd = await store.update(product);
+        res.json(updateProd);
+    } catch(error) {
+        res.status(400);
+        res.json(`Product id [${req.params.id}] not updated. ERR -- ${error}`);
     }
 }
 
@@ -150,6 +185,7 @@ const productRoutes = (app: express.Application) => {
   app.post('/products', utilities.verifyAuthJWT, create)
   app.post('/products/:id/colors', utilities.verifyAuthJWT, addColor)
   app.post('/products/:id/materials', utilities.verifyAuthJWT, addMaterial)
+  app.put('/products/:id', utilities.verifyAuthJWT, update)
   app.delete('/products/:id', utilities.verifyAuthJWT,  destroy)
 }
 

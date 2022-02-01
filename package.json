@@ -8,6 +8,7 @@
     "start": "node dist/server.js",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess 'node ./dist/server.js'",
     "test": "tsc && ENV=test db-migrate --env test up && ENV=test jasmine && db-migrate db:drop test",
+    "test-save": "tsc && ENV=test db-migrate --env test up && ENV=test jasmine > ./src/tests/JASMINE_TEST_RESULTS.txt && db-migrate db:drop test",
     "tsc": "tsc"
   },
   "author": "Udacity",

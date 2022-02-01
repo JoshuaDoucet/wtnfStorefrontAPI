@@ -3,7 +3,7 @@
 
 // Tests for product model
 
-import {ProductStore, Product} from '../product'
+import {ProductStore, Product, ProductUpdate} from '../product'
 import {LocationStore, Location} from '../location'
 import {ColorStore, Color} from '../color'
 import {MaterialStore, Material} from '../material'
@@ -158,6 +158,55 @@ describe('Product model tests', () => {
             }else{
                 throw new Error("product color_ids is defined, but not returned adter adding to DB")
             }
+        }
+    });
+
+    // UPDATE tests
+    it('Should have an update method', () => {
+        expect(productStore.update).toBeDefined();
+    });
+    it('Should update sample product in the products table', async () => {        
+        await productStore.deleteAll();
+        // create a product
+        const createResult = await productStore.create(jacket);
+        // create a copy of result to change null values to undefined 
+        const copyResult = (utilities.objectNullValsToUndefined(createResult) as Product);
+        // set update details
+        if(createResult.id){
+            const updateDetails: ProductUpdate = {
+                id: createResult.id,
+                name: "Updated Jacket",
+                price: 9000,
+                brand: "Gucci"
+            }
+            
+            // update the product
+            const updateResult = await productStore.update(updateDetails);
+            // create a copy of update result to change null values to undefined 
+           const copyUpdateRes = (utilities.objectNullValsToUndefined(updateResult) as Product);
+            // check to see if updated values were changed
+            expect(updateDetails.name).toEqual(copyUpdateRes.name)
+            expect(updateDetails.price+'').toEqual(copyUpdateRes.price+'')
+            expect(updateDetails.brand).toEqual(copyUpdateRes.brand)
+            // check to see if unchanged values remain the same
+            expect(copyUpdateRes.cost+'').toEqual(jacket.cost+'');
+            expect(copyUpdateRes.boh).toEqual(jacket.boh);
+            expect(copyUpdateRes.for_sale).toEqual(jacket.for_sale);
+            expect(copyUpdateRes.category).toEqual(jacket.category);
+            expect(copyUpdateRes.description).toEqual(jacket.description);
+            expect(copyUpdateRes.measurments).toEqual(jacket.measurments);
+            expect(copyUpdateRes.owner).toEqual(jacket.owner);
+            expect(copyUpdateRes.sku).toEqual(jacket.sku);
+            expect(copyUpdateRes.size_family).toEqual(jacket.size_family);
+            expect(copyUpdateRes.size).toEqual(jacket.size);
+            expect(copyUpdateRes.condition).toEqual(jacket.condition);
+            expect(copyUpdateRes.instructions).toEqual(jacket.instructions);
+            expect(copyUpdateRes.country_origin).toEqual(jacket.country_origin);
+            expect(copyUpdateRes.rn_num).toEqual(jacket.rn_num);
+            expect(copyUpdateRes.weight_grams).toEqual(jacket.weight_grams);
+            expect(copyUpdateRes.location_id).toEqual(jacket.location_id+'');
+        }else{
+            throw new Error('proudct id is undefined');
         }
     });
 
