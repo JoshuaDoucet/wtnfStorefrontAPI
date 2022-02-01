@@ -52,8 +52,11 @@ This repo acts as the backend to interact with the WTNF database of products, lo
      ```
      NOTE: this endpoint returns a JWT with authentication information for this user. It should belong in the Authorization header for outgoing requests to the API.
      Example HTTP response
-     ```       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJmaXJzdF9uYW1lIjoiSmFuZSIsImxhc3RfbmFtZSI6IkRvZSIsInBhc3N3b3JkX2hhc2giOiIkMmIkMTEkSkt4dGdNN3NObmlQbFVWb2tod0xIZWZhaklGTTlEd3dWTGtyOWJoZC5idlNHWmRFYlQ3TmUiLCJwaG9uZSI6IjcxOTU1NTAxMDEiLCJlbWFpbCI6ImphbmVkb2VAb3V0bG9vay5jb20iLCJsb2NhdGlvbl9pZCI6IjIifSwiaWF0IjoxNjQzNjc2MzA3LCJleHAiOjE2NDM2Nzk5MDd9.Eq5cdZWqhZfuHzXO5tc0IHCsOU7jzaKxmbrIwo1Tb5Y"
      ```
+     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJmaXJzdF9uYW1lIjoiSmFuZSIsImxhc3RfbmFtZSI6IkRvZSIsInBhc3N3b3JkX2hhc2giOiIkM
+     mIkMTEkSkt4dGdNN3NObmlQbFVWb2tod0xIZWZhaklGTTlEd3dWTGtyOWJoZC5idlNHWmRFYlQ3TmUiLCJwaG9uZSI6IjcxOTU1NTAxMDEiLCJlbWFpbCI6ImphbmVkb2VAb3V0
+     bG9vay5jb20iLCJsb2NhdGlvbl9pZCI6IjIifSwiaWF0IjoxNjQzNjc2MzA3LCJleHAiOjE2NDM2Nzk5MDd9.Eq5cdZWqhZfuHzXO5tc0IHCsOU7jzaKxmbrIwo1Tb5Y"
+     ```       
      This example JWT is decoded below
      ```
        {
