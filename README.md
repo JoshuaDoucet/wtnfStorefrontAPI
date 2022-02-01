@@ -8,23 +8,40 @@ This repo acts as the backend to interact with the WTNF database of products, lo
 * Built and tested using
   - Node.js v15.13.2
   - npm v8.1.2
+  - PostgreSQL 12 database server    
+  - a git client
   - a linux command line interface
 ### Get the application code
 * Clone this repo or download the package .zip
+  - Find a usable directory on your system and run ```git init```
   - At the CLI run ```git clone https://github.com/JoshuaDoucet/wtnfStorefront.git main```
-* Navigate to the root project directory
+* Navigate to the main root project directory ```cd main```
 * Install external modules using npm
   - At thhe CLI run ```npm install```
 ### Get the postgres database up and running
 * Setup the database
   - Update the postgres database environment variables with valid DB credentials in the .env file
-  - Create the database.json file need for migrations.
+  - In a second terminal window login to the postgres user with sudo
+    ```sudo su - postgres```
+  - Open psql and create a dev DB and a test DB with a new user. Names with brackets around them should be deleted (as well as the brackets) and replaced with the corresponding .env variable values.<br>
+    ```psql postgres``` <br>
+    ```CREATE DATABASE <POSTGRES_DB>;``` <br>
+    ```CREATE DATABASE <POSTGRES_TEST_DB>;``` <br>
+    ```CREATE USER <POSTGRES_USER> WITH PASSWORD '<POSTGRES_PASSWORD>';``` <br>
+    ```\c <POSTGRES_TEST_DB>;```<br>
+    ```GRANT ALL PRIVILEGES ON DATABASE <POSTGRES_TEST_DB> TO <POSTGRES_USER>;```<br>
+    ```\c <POSTGRES_DB>;``` <br>
+    ```GRANT ALL PRIVILEGES ON DATABASE <POSTGRES_DB> TO <POSTGRES_USER>;```<br>
+    ```\q```<br>
+* Setup and apply the database migrations
+  - Return to the first terminal window.
+  - Create the database.json file need for migrations. This will also compile the src TS code to JS.
     ```npm run setupdb``` 
-  - TODO
+  - Run ```db:migrate up```
 ### Run the Express web server
 * Run the web server
   - At the CLI run ```npm run watch``` or ```npm run start```
-  - The web server will be running on port 3000
+  - Unless configured differently, the web server should be running on localhost port 3000
 ### Visit the application endpoints
 #### Login to the storefront. 
   This is required to access msot of the application data
@@ -174,7 +191,7 @@ This repo acts as the backend to interact with the WTNF database of products, lo
      ```
  - [PUT] /products/:id (AUTH TOKEN)
    - update - updates a product with specified id using the request body JSON to update specified values. Returned the updated product from the db table. Only the columns in the request body will be updated in the product with specified id. <br>
-     HTTP request body. Only the columns in the request body will be updated in the product with specified id.
+     HTTP request body.<br>
      ```json
       {
         "price": 119.99,
