@@ -58,7 +58,7 @@ This repo acts as the backend to interact with the WTNF database of products, lo
      bG9vay5jb20iLCJsb2NhdGlvbl9pZCI6IjIifSwiaWF0IjoxNjQzNjc2MzA3LCJleHAiOjE2NDM2Nzk5MDd9.Eq5cdZWqhZfuHzXO5tc0IHCsOU7jzaKxmbrIwo1Tb5Y"
      ```       
      This example JWT is decoded below
-     ```
+     ```json
        {
       "header":{
         "alg":"HS256"
