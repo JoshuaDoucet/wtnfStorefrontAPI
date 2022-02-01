@@ -229,7 +229,7 @@ This repo acts as the backend to interact with the WTNF database of products, lo
 
 ## Jasmine tests
 * To view the project's saved test result navigate to path
-  - src/test/JASMINE_TEST_RESULTS.txt
+  - ```src/test/JASMINE_TEST_RESULTS.txt```
 * To run the tests, in a terminal navigate to the project base directory and run
   - ```npm run test```
 
