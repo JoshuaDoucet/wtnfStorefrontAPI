@@ -10,8 +10,11 @@ This repo acts as the backend to interact with the WTNF database of products, lo
   - npm v8.1.2
   - a linux command line interface
 ### Get the application code
-* Clone this repo
+* Clone this repo or download the package .zip
   - At the CLI run ```git clone https://github.com/JoshuaDoucet/wtnfStorefront.git main```
+* Navigate to the root project directory
+* Install external modules using npm
+  - At thhe CLI run ```npm install```
 ### Get the postgres database up and running
 * Setup the database
   - TODO
