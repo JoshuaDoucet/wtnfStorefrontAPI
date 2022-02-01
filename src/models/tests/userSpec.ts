@@ -103,4 +103,12 @@ describe('User model tests', () => {
         }
     });
 
+    it('Should have a deletAll method', () => {
+        expect(userStore.deleteAll).toBeDefined();
+    });
+
+    it("deleteAll should return a value that is defined", async () => {
+        const result = await userStore.deleteAll()
+        expect(result).toBeDefined()
+    });
 });

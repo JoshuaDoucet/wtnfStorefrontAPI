@@ -51,7 +51,15 @@ describe('Material model tests', () => {
         }else{
             throw new Error("Invalid material id");
         }
+    });
 
+    it('Should have a deletAll method', () => {
+        expect(materialStore.deleteAll).toBeDefined();
+    });
+
+    it("deleteAll should return a value that is defined", async () => {
+        const result = await materialStore.deleteAll()
+        expect(result).toBeDefined()
     });
 
 });

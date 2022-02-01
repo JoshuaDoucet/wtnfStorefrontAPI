@@ -77,6 +77,8 @@ describe('Test orders endpoint responses', () => {
 
     beforeEach(async function (){
         await orderStore.deleteAll();
+        if(userId)
+            testOrd.user_id = userId;
         order = await orderStore.create(testOrd)
         ordId = order.id
     })

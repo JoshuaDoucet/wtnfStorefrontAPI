@@ -1,3 +1,4 @@
+import { response } from 'express';
 import {ColorStore, Color} from '../color'
 
 describe('Color model tests', () => {
@@ -50,7 +51,15 @@ describe('Color model tests', () => {
         }else{
             throw new Error("Invalid color id");
         }
+    });
 
+    it('Should have a deletAll method', () => {
+        expect(colorStore.deleteAll).toBeDefined();
+    });
+
+    it("deleteAll should return a value that is defined", async () => {
+        const result = await colorStore.deleteAll()
+        expect(result).toBeDefined()
     });
 
 });

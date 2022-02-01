@@ -79,7 +79,15 @@ describe('Location model tests', () => {
         }else{
             throw new Error("Invalid location id");
         }
+    });
 
+    it('Should have a deletAll method', () => {
+        expect(locationStore.deleteAll).toBeDefined();
+    });
+
+    it("deleteAll should return a value that is defined", async () => {
+        const result = await locationStore.deleteAll()
+        expect(result).toBeDefined()
     });
 
 });

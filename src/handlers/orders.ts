@@ -7,35 +7,16 @@ import { Order, OrderStore } from '../models/order'
 import utilities from '../utilities/utilities';
 
 const store = new OrderStore();
-
 // /cart [GET]
 const cart = async (_req: Request, res: Response) => {
     try{
-        const token = (_req.headers.authorization)?.split(' ')[1];
-        if(token){
-            const payload = jwt.decode(token);
-            if(payload != null && typeof payload === 'object'){
-                if('user' in payload){
-                    var user = payload.user;
-                    if('id' in user){
-                        var userId = user.id
-                        const cart = await store.cart(userId)
-                        res.json(cart);
-                    }else{
-                        res.status(401)
-                        res.json("Invalid data. Auth token needs user id. Cannot view cart. Attempt to sign in");        
-                    }
-                }else{
-                    res.status(401)
-                    res.json("Invalid data. Auth token needs user object. Cannot view cart. Attempt to sign in");    
-                }
-            }else{
-                res.status(401)
-                res.json("No payload info in auth token. Cannot view cart. Attempt to sign in");
-            }              
+        const userId = utilities.getAuthUserId(_req);
+        if(userId){
+            const cart = await store.cart(userId)
+            res.json(cart);
         }else{
             res.status(401)
-            res.json("No auth token provided. Cannot view cart. Please sign in");
+            res.json("Invalid data. Auth token needs user id. Cannot view cart. Attempt to sign in");        
         }
     }catch(err){
         res.status(503);
@@ -72,17 +53,20 @@ const show = async (req: Request, res: Response) => {
 
 // /orders [POST]
 const create = async (req: Request, res: Response) => {
-    var orderName: string | undefined;
     try {
-        // Pull name value for error handling
-        orderName = req.body.name;
-        const order: Order = {
-            status: req.body.status,
-            user_id: req.body.user_id
-        };
-        // create product
-        const newOrder = await store.create(order);
-        res.json(newOrder);
+        // get authorized user id to associate with order
+        const userId = utilities.getAuthUserId(req);
+        if(userId){
+            const order: Order = {
+                status: "active",
+                user_id: userId
+            };
+            // create product
+            const newOrder = await store.create(order);
+            res.json(newOrder);
+        }else{
+            throw new Error ("Cannot create order with an undefined user_id");
+        }
     } catch(error) {
         res.status(400);
         res.json(`Order for user ID ${req.body.user_id} not added. ERR -- ${error}`);

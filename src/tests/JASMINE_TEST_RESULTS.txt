@@ -59,6 +59,8 @@ starting app on: 0.0.0.0:3000
     [32m✓ Should add blue color to the colors table[39m
     [32m✓ Should have a delete method[39m
     [32m✓ delete should remove a color from the colors table[39m
+    [32m✓ Should have a deletAll method[39m
+    [32m✓ deleteAll should return a value that is defined[39m
 
   Location model tests
     [32m✓ Should have an index method[39m
@@ -68,6 +70,8 @@ starting app on: 0.0.0.0:3000
     [32m✓ Should add sample location to the locations table[39m
     [32m✓ Should have a delete method[39m
     [32m✓ delete should remove a location from the locations table[39m
+    [32m✓ Should have a deletAll method[39m
+    [32m✓ deleteAll should return a value that is defined[39m
 
   Material model tests
     [32m✓ Should have an index method[39m
@@ -77,6 +81,8 @@ starting app on: 0.0.0.0:3000
     [32m✓ Should add brown leather material to the materials table[39m
     [32m✓ Should have a delete method[39m
     [32m✓ delete should remove a material from the materials table[39m
+    [32m✓ Should have a deletAll method[39m
+    [32m✓ deleteAll should return a value that is defined[39m
 
   Order model tests
     [32m✓ Should have an index method[39m
@@ -86,6 +92,8 @@ starting app on: 0.0.0.0:3000
     [32m✓ Should add sample order to the orders table[39m
     [32m✓ Should have a delete method[39m
     [32m✓ delete should remove an order from the orders table[39m
+    [32m✓ Should have a deletAll method[39m
+    [32m✓ deleteAll should return a value that is defined[39m
 
   Product model tests
     [32m✓ Should have an index method[39m
@@ -95,6 +103,8 @@ starting app on: 0.0.0.0:3000
     [32m✓ Should add sample product to the products table[39m
     [32m✓ Should have a delete method[39m
     [32m✓ delete should remove a product from the products table[39m
+    [32m✓ Should have a deletAll method[39m
+    [32m✓ deleteAll should return a value that is defined[39m
 
   User model tests
     [32m✓ Should have an index method[39m
@@ -104,6 +114,8 @@ starting app on: 0.0.0.0:3000
     [32m✓ Should add sample user to the users table[39m
     [32m✓ Should have a delete method[39m
     [32m✓ delete should remove a user from the users table[39m
+    [32m✓ Should have a deletAll method[39m
+    [32m✓ deleteAll should return a value that is defined[39m
 
-Executed 74 of 74 specs[32m SUCCESS[39m in 4 secs.
+Executed 86 of 86 specs[32m SUCCESS[39m in 4 secs.
 [INFO] Deleted database "test"

@@ -87,7 +87,14 @@ describe('Order model tests', () => {
         }else{
             throw new Error("Invalid order id");
         }
-
     });
 
+    it('Should have a deletAll method', () => {
+        expect(orderStore.deleteAll).toBeDefined();
+    });
+
+    it("deleteAll should return a value that is defined", async () => {
+        const result = await orderStore.deleteAll()
+        expect(result).toBeDefined()
+    });
 });

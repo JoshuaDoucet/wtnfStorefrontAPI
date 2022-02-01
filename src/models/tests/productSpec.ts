@@ -9,20 +9,6 @@ import {ColorStore, Color} from '../color'
 import {MaterialStore, Material} from '../material'
 import utilities from '../../utilities/utilities'
 
-/*
-beforeEach(async function() {
-    orangeColor = await colorStore.create(orangeColor);
-    if(orangeColor.id && jacket.color_ids){
-        orangeId = orangeColor.id;
-        jacket.color_ids[0] = orangeId
-    }
-})
-
-afterEach(async function() {
-   // await colorStore.delete(orangeId)
-})
-*/
-
 describe('Product model tests', () => {
     const productStore = new ProductStore();
     var jacket: Product = {
@@ -193,4 +179,12 @@ describe('Product model tests', () => {
 
     });
 
+    it('Should have a deletAll method', () => {
+        expect(productStore.deleteAll).toBeDefined();
+    });
+
+    it("deleteAll should return a value that is defined", async () => {
+        const result = await productStore.deleteAll()
+        expect(result).toBeDefined()
+    });
 });
