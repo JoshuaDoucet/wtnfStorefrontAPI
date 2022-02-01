@@ -32,7 +32,7 @@ This repo acts as the backend to interact with the WTNF database of products, lo
      NOTE: the above credentials will be valid if using the migrations provided in the repo. Otherwise a new user must be created before attempting to authenticate.<br>
      This endpoint will return a json web token (JWT) for authorization to the rest of the application. This jwt may need to be added manually to request headers. <b>In postman add the jwt to the "Authorization" tab. Select "Bearer token" as "Type" and paste the JWT into the "Token" field before making requests that need authorization.</b>
 
-* Interacting with the order models data. 
+#### Interacting with the order models data. 
  - [GET] /orders (AUTH TOKEN)
    - index - the response is a list of all order rows
  - [GET] /orders/:id (AUTH TOKEN)
@@ -56,7 +56,7 @@ This repo acts as the backend to interact with the WTNF database of products, lo
    - delete - deletes the order specified by id from the database. Response returns the order row being deleted.
 
 
-* Interacting with the Color models data
+#### Interacting with the Color models data
  - [GET] /colors
    - index - the response is a list of all color rows
  - [GET] /colors/:id
@@ -75,7 +75,7 @@ This repo acts as the backend to interact with the WTNF database of products, lo
  - [DELETE] /colors/:id (AUTH TOKEN)
    - delete - deletes the color specified by id from the database. Response returns the color row that was deleted.
    
-* Interacting with the Location models data. 
+#### Interacting with the Location models data. 
  - [GET] /locations (AUTH TOKEN)
    - index - the response is a list of all location rows
  - [GET] /locations/:id (AUTH TOKEN)
@@ -100,7 +100,7 @@ This repo acts as the backend to interact with the WTNF database of products, lo
    - delete - deletes the location specified by id from the database. Response returns the location row being deleted.
 
 
-* Interacting with the material models data. 
+#### Interacting with the material models data. 
  - [GET] /materials
    - index - the response is a list of all material rows
  - [GET] /materials/:id 
