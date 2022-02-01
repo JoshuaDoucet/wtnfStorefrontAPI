@@ -169,7 +169,7 @@ This repo acts as the backend to interact with the WTNF database of products, lo
       }
      ```
  - [PUT] /products/:id (AUTH TOKEN)
-   - update - updates a product with specified id using the request body JSON to update specified values. Returned the updated product from the db table
+   - update - updates a product with specified id using the request body JSON to update specified values. Returned the updated product from the db table. Only the columns in the request body will be updated in the product with specified id. <br>
      HTTP request body. Only the columns in the request body will be updated in the product with specified id.
      ```json
       {
