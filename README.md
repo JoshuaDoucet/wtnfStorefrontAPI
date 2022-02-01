@@ -26,14 +26,14 @@ This repo acts as the backend to interact with the WTNF database of products, lo
   - Login to the postgres user with sudo
     ```sudo su - postgres```
   - Open psql and create a dev DB and a test DB with a new user. Names with brackets around them should be deleted (as well as the brackets) and replaced with the corresponding .env variable values.<br>
-    ```psql postgres```
-    ```CREATE DATABASE <POSTGRES_DB>;```
-    ```CREATE DATABASE <POSTGRES_TEST_DB>;```
-    ```CREATE USER <POSTGRES_USER> WITH PASSWORD '<POSTGRES_PASSWORD>';
-    ```\c <POSTGRES_DB>;```
-    ```GRANT ALL PRIVILEGES ON DATABASE <POSTGRES_DB> TO <POSTGRES_USER>;
-    ```\c <POSTGRES_TEST_DB>;```
-    ```GRANT ALL PRIVILEGES ON DATABASE <POSTGRES_TEST_DB> TO <POSTGRES_USER>;
+    ```psql postgres``` <br>
+    ```CREATE DATABASE <POSTGRES_DB>;``` <br>
+    ```CREATE DATABASE <POSTGRES_TEST_DB>;``` <br>
+    ```CREATE USER <POSTGRES_USER> WITH PASSWORD '<POSTGRES_PASSWORD>';``` <br>
+    ```\c <POSTGRES_DB>;``` <br>
+    ```GRANT ALL PRIVILEGES ON DATABASE <POSTGRES_DB> TO <POSTGRES_USER>;```<br>
+    ```\c <POSTGRES_TEST_DB>;```<br>
+    ```GRANT ALL PRIVILEGES ON DATABASE <POSTGRES_TEST_DB> TO <POSTGRES_USER>;```<br>
 ### Run the Express web server
 * Run the web server
   - At the CLI run ```npm run watch``` or ```npm run start```
