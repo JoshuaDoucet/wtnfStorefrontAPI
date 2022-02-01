@@ -37,16 +37,23 @@ This repo acts as the backend to interact with the WTNF database of products, lo
    - index - the response is a list of all order rows
  - [GET] /orders/:id (AUTH TOKEN)
    - show - the response is a single order that matches the specified id
+ - [GET] /orders/:id/products (AUTH TOKEN)
+   - getProducts - the response is an array of products that belong to an the order with specified id
+ - [GET] /cart (AUTH TOKEN)
+   - cart - the response is an array of products added to active orders that belong to the authorized user
  - [POST] /orders (AUTH TOKEN)
-   - create - adds new order to database. Response returns the created order object <br>
+   - create - associates the authorized user with a new active order and adds the new order to database. Response returns the created order object <br>
+ - [POST] /orders/:id/products (AUTH TOKEN)
+   - addProduct - adds new product and desired quantity to order <br>
      HTTP request body
      ```json
-     {
-         "status": "active",
-     }
+      {
+          "product_id": "2",
+          "product_quantity": 33
+      }
      ```
- - [DELETE] /materials/:id (AUTH TOKEN)
-   - delete - deletes the material specified by id from the database. Response returns the material row being deleted.
+ - [DELETE] /orders/:id (AUTH TOKEN)
+   - delete - deletes the order specified by id from the database. Response returns the order row being deleted.
 
 
 * Interacting with the Color models data
