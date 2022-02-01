@@ -41,7 +41,7 @@ This repo acts as the backend to interact with the WTNF database of products, lo
 ### Run the Express web server
 * Run the web server
   - At the CLI run ```npm run watch``` or ```npm run start```
-  - The web server will be running on port 3000
+  - Unless configured differently, the web server should be running on localhost port 3000
 ### Visit the application endpoints
 #### Login to the storefront. 
   This is required to access msot of the application data
