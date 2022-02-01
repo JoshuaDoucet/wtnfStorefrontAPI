@@ -32,6 +32,55 @@ This repo acts as the backend to interact with the WTNF database of products, lo
      NOTE: the above credentials will be valid if using the migrations provided in the repo. Otherwise a new user must be created before attempting to authenticate.<br>
      This endpoint will return a json web token (JWT) for authorization to the rest of the application. This jwt may need to be added manually to request headers. <b>In postman add the jwt to the "Authorization" tab. Select "Bearer token" as "Type" and paste the JWT into the "Token" field before making requests that need authorization.</b>
 
+#### Interacting with the User models data
+ - [GET] /users (AUTH TOKEN)
+   - index - the response is a list of all user rows
+ - [GET] /users/:id (AUTH TOKEN)
+   - show - the response is a single user that matches the specified id
+ - [POST] /users (AUTH TOKEN)
+   - create - adds new user to database. When the user is added, a password hash is stored rather than the original<br>
+     HTTP request body
+     ```json
+      {
+          "first_name": "Jane",
+          "last_name": "Doe",
+          "phone": 7195550101,
+          "email": "janedoe@outlook.com",
+          "password": "my dog was in a tree at the park near route 66",
+          "location_id": "2"
+      }
+     ```
+     NOTE: this endpoint returns a JWT with authentication information for this user. It should belong in the Authorization header for outgoing requests to the API.
+     Example HTTP response
+     ```       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJmaXJzdF9uYW1lIjoiSmFuZSIsImxhc3RfbmFtZSI6IkRvZSIsInBhc3N3b3JkX2hhc2giOiIkMmIkMTEkSkt4dGdNN3NObmlQbFVWb2tod0xIZWZhaklGTTlEd3dWTGtyOWJoZC5idlNHWmRFYlQ3TmUiLCJwaG9uZSI6IjcxOTU1NTAxMDEiLCJlbWFpbCI6ImphbmVkb2VAb3V0bG9vay5jb20iLCJsb2NhdGlvbl9pZCI6IjIifSwiaWF0IjoxNjQzNjc2MzA3LCJleHAiOjE2NDM2Nzk5MDd9.Eq5cdZWqhZfuHzXO5tc0IHCsOU7jzaKxmbrIwo1Tb5Y"
+     ```
+     This example JWT is decoded below
+     ```
+       {
+      "header":{
+        "alg":"HS256"
+        "typ":"JWT"
+      }
+      "payload":{
+        "user":{
+          "id":3
+          "first_name":"Jane"
+          "last_name":"Doe"
+          "password_hash":"$2b$11$JKxtgM7sNniPlUVokhwLHefajIFM9DwwVLkr9bhd.bvSGZdEbT7Ne"
+          "phone":"7195550101"
+          "email":"janedoe@outlook.com"
+          "location_id":"2"
+        }
+          "iat":1643676307
+          "exp":1643679907
+        }
+      }
+     ```
+ - [DELETE] /users/:id (AUTH TOKEN)
+   - delete - deletes the user specified by id from the database. Response returns the user row that was deleted.
+   
+
+
 #### Interacting with the order models data. 
  - [GET] /orders (AUTH TOKEN)
    - index - the response is a list of all order rows
