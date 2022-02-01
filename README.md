@@ -25,7 +25,7 @@ This repo acts as the backend to interact with the WTNF database of products, lo
     ```npm run setupdb``` 
   - Login to the postgres user with sudo
     ```sudo su - postgres```
-  - Open psql and create a dev DB and a test DB with a new user. Names with brackets around them should be deleted (as well as the brackets) and replaced with the corresponding .env variable values.
+  - Open psql and create a dev DB and a test DB with a new user. Names with brackets around them should be deleted (as well as the brackets) and replaced with the corresponding .env variable values.<br>
     ```psql postgres```
     ```CREATE DATABASE <POSTGRES_DB>;```
     ```CREATE DATABASE <POSTGRES_TEST_DB>;```
