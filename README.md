@@ -37,7 +37,7 @@ This repo acts as the backend to interact with the WTNF database of products, lo
    - index - the response is a list of all user rows
  - [GET] /users/:id (AUTH TOKEN)
    - show - the response is a single user that matches the specified id
- - [POST] /users (AUTH TOKEN)
+ - [POST] /users 
    - create - adds new user to database. When the user is added, a password hash is stored rather than the original<br>
      HTTP request body
      ```json
@@ -50,7 +50,7 @@ This repo acts as the backend to interact with the WTNF database of products, lo
           "location_id": "2"
       }
      ```
-     NOTE: this endpoint returns a JWT with authentication information for this user. It should belong in the Authorization header for outgoing requests to the API.
+     NOTE: this endpoint returns a JWT with authentication information for this user. It should belong in the Authorization header for outgoing requests to the API.<br>
      Example HTTP response
      ```
      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJmaXJzdF9uYW1lIjoiSmFuZSIsImxhc3RfbmFtZSI6IkRvZSIsInBhc3N3b3JkX2hhc2giOiIkM
@@ -84,7 +84,7 @@ This repo acts as the backend to interact with the WTNF database of products, lo
    
 
 
-#### Interacting with the order models data. 
+#### Interacting with the Order models data. 
  - [GET] /orders (AUTH TOKEN)
    - index - the response is a list of all order rows
  - [GET] /orders/:id (AUTH TOKEN)
@@ -108,6 +108,66 @@ This repo acts as the backend to interact with the WTNF database of products, lo
    - delete - deletes the order specified by id from the database. Response returns the order row being deleted.
 
 
+#### Interacting with the Product models data. 
+ - [GET] /products
+   - index - the response is a list of all product rows
+ - [GET] /products/:id 
+   - show - the response is a single product that matches the specified id
+ - [GET] /products/:id/colors 
+   - getColors - the response is an array of color ids that belong to an the product with specified id
+ - [GET] /products/:id/materials 
+   - getMaterials - the response is an array of material ids that belong to an the product with specified id
+ - [POST] /products (AUTH TOKEN)
+   - create - creates a product with the request body information and adds the product to the database. The response should be the created product.
+     HTTP request body
+     ```json
+      {
+          "name": "Blue Leather Womens Belt",
+          "price": "17",
+          "cost": "4",
+          "boh": 1,
+          "for_sale": true,
+          "category": "accessories",
+          "description": "Lightly used 36 inch x 2 inch blue leather belt with a silver buckle.",
+          "measurments": "Length 36 in, Width 2 in",
+          "owner": "Jane Doe",
+          "sku": "JD/1/0003",
+          "size_family": "womens",
+          "size": "36",
+          "brand": "Brittany Collection",
+          "condition": "Used",
+          "instructions": "hand wash with lemon juice",
+          "country_origin": "MEXICO",
+          "rn_num": null,
+          "weight_grams": 150,
+          "location_id": 1,
+          "color_ids": [
+              "2"
+          ],
+          "material_ids": [
+              "1", "2"
+          ]
+      }
+     ```
+ - [POST] /products/:id/colors (AUTH TOKEN)
+   - addColor - adds a color to the product of specified id. Returns a response of the row added to product_colors <br>
+     HTTP request body
+     ```json
+      {
+          "color_id": "3"
+      }
+     ```
+ - [POST] /products/:id/materials (AUTH TOKEN)
+   - addMaterial - adds a material to the product of specified id. Returns a response of the row added to product_materials <br>
+     HTTP request body
+     ```json
+      {
+          "materials_id": "3"
+      }
+     ```
+ - [DELETE] /products/:id (AUTH TOKEN)
+   - delete - deletes the product specified by id from the database. Response returns the product row being deleted.
+
 #### Interacting with the Color models data
  - [GET] /colors
    - index - the response is a list of all color rows
@@ -126,7 +186,23 @@ This repo acts as the backend to interact with the WTNF database of products, lo
      ```
  - [DELETE] /colors/:id (AUTH TOKEN)
    - delete - deletes the color specified by id from the database. Response returns the color row that was deleted.
-   
+
+#### Interacting with the material models data. 
+ - [GET] /materials
+   - index - the response is a list of all material rows
+ - [GET] /materials/:id 
+   - show - the response is a single material that matches the specified id
+ - [POST] /materials (AUTH TOKEN)
+   - create - adds new material to database. Response returns the created material object <br>
+     HTTP request body
+     ```json
+     {
+         "name": "Carbon Fiber",
+     }
+     ```
+ - [DELETE] /materials/:id (AUTH TOKEN)
+   - delete - deletes the material specified by id from the database. Response returns the material row being deleted.
+
 #### Interacting with the Location models data. 
  - [GET] /locations (AUTH TOKEN)
    - index - the response is a list of all location rows
@@ -150,23 +226,6 @@ This repo acts as the backend to interact with the WTNF database of products, lo
      ```
  - [DELETE] /locations/:id (AUTH TOKEN)
    - delete - deletes the location specified by id from the database. Response returns the location row being deleted.
-
-
-#### Interacting with the material models data. 
- - [GET] /materials
-   - index - the response is a list of all material rows
- - [GET] /materials/:id 
-   - show - the response is a single material that matches the specified id
- - [POST] /materials (AUTH TOKEN)
-   - create - adds new material to database. Response returns the created material object <br>
-     HTTP request body
-     ```json
-     {
-         "name": "Carbon Fiber",
-     }
-     ```
- - [DELETE] /materials/:id (AUTH TOKEN)
-   - delete - deletes the material specified by id from the database. Response returns the material row being deleted.
 
 ## Jasmine tests
 * To view the project's saved test result navigate to path
