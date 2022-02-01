@@ -17,6 +17,9 @@ This repo acts as the backend to interact with the WTNF database of products, lo
   - At thhe CLI run ```npm install```
 ### Get the postgres database up and running
 * Setup the database
+  - Update the postgres database environment variables with valid DB credentials in the .env file
+  - Create the database.json file need for migrations.
+    ```npm run setupdb``` 
   - TODO
 ### Run the Express web server
 * Run the web server
