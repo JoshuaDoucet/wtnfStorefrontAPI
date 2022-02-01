@@ -21,7 +21,7 @@ This repo acts as the backend to interact with the WTNF database of products, lo
 ### Get the postgres database up and running
 * Setup the database
   - Update the postgres database environment variables with valid DB credentials in the .env file
-  - Login to the postgres user with sudo
+  - In a second terminal window login to the postgres user with sudo
     ```sudo su - postgres```
   - Open psql and create a dev DB and a test DB with a new user. Names with brackets around them should be deleted (as well as the brackets) and replaced with the corresponding .env variable values.<br>
     ```psql postgres``` <br>
@@ -34,8 +34,7 @@ This repo acts as the backend to interact with the WTNF database of products, lo
     ```GRANT ALL PRIVILEGES ON DATABASE <POSTGRES_DB> TO <POSTGRES_USER>;```<br>
     ```\q```<br>
 * Setup and apply the database migrations
-  - Install db-migrate globally <br>
-    ```npm install -g db-migrate```  
+  - Return to the first terminal window.
   - Create the database.json file need for migrations. This will also compile the src TS code to JS.
     ```npm run setupdb``` 
   - Run ```db:migrate up```
