@@ -34,6 +34,10 @@ This repo acts as the backend to interact with the WTNF database of products, lo
     ```GRANT ALL PRIVILEGES ON DATABASE <POSTGRES_TEST_DB> TO <POSTGRES_USER>;```<br>
     ```\c <POSTGRES_DB>;``` <br>
     ```GRANT ALL PRIVILEGES ON DATABASE <POSTGRES_DB> TO <POSTGRES_USER>;```<br>
+    ```\q```<br>
+  - Apply the database migrations <br>
+    - Install db-migrate globally
+      ```npm install -g db-migrate```  
 ### Run the Express web server
 * Run the web server
   - At the CLI run ```npm run watch``` or ```npm run start```
