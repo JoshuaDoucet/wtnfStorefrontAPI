@@ -33,6 +33,7 @@ This repo acts as the backend to interact with the WTNF database of products, lo
     ```\c <POSTGRES_DB>;``` <br>
     ```GRANT ALL PRIVILEGES ON DATABASE <POSTGRES_DB> TO <POSTGRES_USER>;```<br>
     ```\q```<br>
+  - The postgres DB should be running on default port 5432
 * Setup and apply the database migrations
   - Return to the first terminal window.
   - Create the database.json file need for migrations. This will also compile the src TS code to JS.
