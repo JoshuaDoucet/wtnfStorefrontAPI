@@ -12,4 +12,12 @@
     "user": {"ENV": "POSTGRES_USER"},
     "password": {"ENV": "POSTGRES_PASSWORD"}
     }
+,"prod":{
+        "driver":"pg",
+        "host": {"ENV":"POSTGRES_PROD_HOST"},
+        "port": {"ENV":"POSTGRES_PROD_PORT"}, 
+        "database": {"ENV": "POSTGRES_PROD_DB"},
+        "user": {"ENV": "POSTGRES_PROD_USER"},
+        "password": {"ENV": "POSTGRES_PROD_PASSWORD"}
+        }
 }
