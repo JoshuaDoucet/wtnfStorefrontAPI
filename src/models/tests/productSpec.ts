@@ -5,6 +5,7 @@
 import { ProductStore, Product, ProductUpdate } from '../product';
 import { LocationStore, Location } from '../location';
 import { ColorStore, Color } from '../color';
+import { ImageStore, Image} from '../image'
 import { MaterialStore, Material } from '../material';
 import utilities from '../../utilities/utilities';
 
@@ -51,6 +52,13 @@ describe('Product model tests', () => {
   };
   let materialId: string | undefined;
 
+  const imageStore = new ImageStore();
+  const blackBagImg: Image = { 
+      name: 'Black Bag Crossbody',
+      path: 'public/images/products/blackbag.jpg' 
+  };
+  let imageId: string | undefined
+
   const locationStore = new LocationStore();
   let testLocation: Location = {
     name: 'Test Location',
@@ -82,6 +90,12 @@ describe('Product model tests', () => {
     const material = await materialStore.create(silkMaterial);
     materialId = material.id;
     if (materialId) jacket.material_ids = [materialId];
+
+    // Create image and add its id to test jacket product
+    await imageStore.deleteAll();
+    const image = await imageStore.create(blackBagImg);
+    imageId = image.id;
+    if (imageId) jacket.image_ids = [imageId];
   });
 
   afterAll(async function() {
@@ -90,6 +104,7 @@ describe('Product model tests', () => {
     materialStore.deleteAll();
     colorStore.deleteAll();
     productStore.deleteAll();
+    imageStore.deleteAll();
   });
 
   beforeEach(async function() {

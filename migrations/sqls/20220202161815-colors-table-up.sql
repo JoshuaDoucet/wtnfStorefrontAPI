@@ -14,4 +14,14 @@ INSERT INTO colors (name, green, blue, hex)
 INSERT INTO colors (name, red, green, blue) 
     VALUES ('Blue', 0, 0, 255);
 INSERT INTO colors (name) 
-    VALUES ('Purple');
+    VALUES ('Purple'),
+           ('Yellow'),
+           ('Orange'),
+           ('Teal'),
+           ('Black'),
+           ('White'),
+           ('Gold'),
+           ('Silver'),
+           ('Brown'),
+           ('Gray'),
+           ('Pink');

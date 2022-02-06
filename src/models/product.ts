@@ -29,6 +29,7 @@ export type Product = {
   location_id?: string; // locationID
   color_ids?: string[]; // colorID array
   material_ids?: string[]; // materialsID array
+  image_ids?: string[]; // imageID array
 };
 
 // Product type for updating
@@ -76,6 +77,9 @@ export class ProductStore {
           products[i].material_ids = await this.getMaterials(
             (products[i].id as unknown) as string
           );
+          products[i].image_ids = await this.getImages(
+            (products[i].id as unknown) as string
+          );
         }
       }
 
@@ -96,6 +100,7 @@ export class ProductStore {
 
       product.color_ids = await this.getColors(id);
       product.material_ids = await this.getMaterials(id);
+      product.image_ids = await this.getImages(id);
 
       return result.rows[0]; //should be 1 location returned
     } catch (err) {
@@ -155,10 +160,18 @@ export class ProductStore {
         }
       }
 
-      // ensure colors and materials were correctly related to product
-      const color_ids = await this.getColors(productId);
-      addedProduct.color_ids = color_ids;
+      // link image IDs to product
+      if (product.image_ids) {
+        for (let i = 0; i <= product.image_ids.length; i++) {
+          await this.addImage(product.image_ids[i], productId);
+        }
+      }
+
+      // ensure colors, materials, images were correctly related to product
+      addedProduct.color_ids = await this.getColors(productId);
       addedProduct.material_ids = await this.getMaterials(productId);
+      addedProduct.image_ids = await this.getImages(productId);
+
       return addedProduct;
     } catch (error) {
       throw new Error(`Could not add product ${product.name}. Error: ${error}`);
@@ -201,9 +214,10 @@ export class ProductStore {
   // DELETE a product row
   async delete(id: string): Promise<Product> {
     try {
-      //remove color and material links to product with id
+      //remove color, material, image links to product with id
       this.removeMaterials(id);
       this.removeColors(id);
+      this.removeImages(id);
       //remove product from products table
       const sql = 'DELETE FROM products WHERE id=($1) RETURNING *';
       const connect = await Client.connect();
@@ -234,23 +248,78 @@ export class ProductStore {
     }
   }
 
-  // get product material IDs
-  async getMaterials(productId: string): Promise<string[]> {
+  // get product image IDs
+  async getImages(productId: string): Promise<string[]> {
     try {
       const sql =
-        'SELECT materials.id FROM materials ' +
-        'INNER JOIN product_materials ON product_materials.product_id=($1) ' +
-        'AND product_materials.materials_id=materials.id';
+        'SELECT images.id FROM images ' +
+        'INNER JOIN product_images ON product_images.product_id=($1) ' +
+        'AND product_images.image_id=images.id';
       const conn = await Client.connect();
       const result = await conn.query(sql, [productId]);
-      const materialIds = result.rows;
-      const idArray = this.normalizeIdResults(materialIds);
+      const imageIds = result.rows;
+      const idArray = this.normalizeIdResults(imageIds);
       conn.release();
       return idArray;
     } catch (error) {
-      throw new Error(`Could not get product matterial. Error: ${error}`);
+      throw new Error(`Could not get product images. Error: ${error}`);
     }
   }
+
+  // addImage to product
+  async addImage(imageId: string, productId: string): Promise<Product> {
+    try {
+      const sql =
+        'INSERT INTO product_images (image_id, product_id) ' +
+        'VALUES( (SELECT id FROM images WHERE id=$1), ' +
+        '( SELECT id FROM products WHERE id=$2)) RETURNING *';
+      const conn = await Client.connect();
+      const result = await conn.query(sql, [imageId, productId]);
+      const prodImg = result.rows[0];
+      conn.release();
+      return prodImg;
+    } catch (err) {
+      throw new Error(
+        `Could not add image ${imageId} to product ${productId} ERR -- ${err}`
+      );
+    }
+  }
+
+  // removeMaterials from product, removes all materials from a product
+  async removeImages(productId: string): Promise<Product[]> {
+    try {
+      const sql =
+        'DELETE FROM product_images WHERE product_id=($1) RETURNING *';
+      const connect = await Client.connect();
+      const result = await connect.query(sql, [productId]);
+      const delImgs = result.rows;
+      connect.release();
+      return delImgs;
+    } catch (err) {
+      throw new Error(
+        `Could not delete images from product ID ${productId}. Error: ${err}`
+      );
+    }
+  }  
+
+    // get product image IDs
+    async getMaterials(productId: string): Promise<string[]> {
+      try {
+        const sql =
+          'SELECT materials.id FROM materials ' +
+          'INNER JOIN product_materials ON product_materials.product_id=($1) ' +
+          'AND product_materials.materials_id=materials.id';
+        const conn = await Client.connect();
+        const result = await conn.query(sql, [productId]);
+        const colorIds = result.rows;
+        const idArray = this.normalizeIdResults(colorIds);
+        conn.release();
+        return idArray;
+      } catch (error) {
+        throw new Error(`Could not get product matterial. Error: ${error}`);
+      }
+    }
+  
 
   // addMaterial to product
   async addMaterial(materialId: string, productId: string): Promise<Product> {
@@ -352,3 +421,4 @@ export class ProductStore {
     return resultIds;
   };
 }
+

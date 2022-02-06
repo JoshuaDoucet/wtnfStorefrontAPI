@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 
 //Route functions
 import colorRoutes from './handlers/colors';
+import imageRoutes from './handlers/images'
 import locationRoutes from './handlers/locations';
 import materialRoutes from './handlers/materials';
 import orderRoutes from './handlers/orders';
@@ -10,7 +11,7 @@ import productRoutes from './handlers/products';
 import userRoutes from './handlers/users';
 
 const app: express.Application = express();
-const address: string = '0.0.0.0:3000';
+const address: string = 'localhost:3000';
 
 app.use(bodyParser.json());
 
@@ -25,6 +26,7 @@ materialRoutes(app);
 orderRoutes(app);
 productRoutes(app);
 userRoutes(app);
+imageRoutes(app);
 
 app.listen(3000, function() {
   console.log(`starting app on: ${address}`);

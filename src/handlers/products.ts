@@ -64,7 +64,8 @@ const create = async (req: Request, res: Response) => {
       weight_grams: req.body.weight_grams,
       location_id: req.body.location_id,
       color_ids: req.body.color_ids,
-      material_ids: req.body.material_ids
+      material_ids: req.body.material_ids,
+      image_ids: req.body.image_ids
     };
     // create product
     const newProd = await store.create(product);
@@ -135,6 +136,18 @@ const addColor = async (_req: Request, res: Response) => {
   }
 };
 
+// /products/:id/images GET
+const getImages = async (_req: Request, res: Response) => {
+  const productId: string = _req.params.id;
+  try {
+    const images = await store.getImages(productId);
+    res.json(images);
+  } catch (err) {
+    res.status(400);
+    res.json('Cannot get images for product. ERR -- ' + err);
+  }
+};
+
 // /products/:id/materials GET
 const getMaterials = async (_req: Request, res: Response) => {
   const productId: string = _req.params.id;
@@ -144,6 +157,19 @@ const getMaterials = async (_req: Request, res: Response) => {
   } catch (err) {
     res.status(400);
     res.json('Cannot get materials for product. ERR -- ' + err);
+  }
+};
+
+// /products/:id/images POST
+const addImage = async (_req: Request, res: Response) => {
+  const productId: string = _req.params.id;
+  const imageId: string = _req.body.material_id;
+  try {
+    const addedImg = await store.addImage(imageId, productId);
+    res.json(addedImg);
+  } catch (err) {
+    res.status(400);
+    res.json('Cannot add image to product. ERR -- ' + err);
   }
 };
 
@@ -181,9 +207,11 @@ const productRoutes = (app: express.Application) => {
   app.get('/products', index);
   app.get('/products/:id', show);
   app.get('/products/:id/colors', getColors);
+  app.get('/products/:id/images', getImages);
   app.get('/products/:id/materials', getMaterials);
   app.post('/products', utilities.verifyAuthJWT, create);
   app.post('/products/:id/colors', utilities.verifyAuthJWT, addColor);
+  app.post('/products/:id/images', utilities.verifyAuthJWT, addImage);
   app.post('/products/:id/materials', utilities.verifyAuthJWT, addMaterial);
   app.put('/products/:id', utilities.verifyAuthJWT, update);
   app.delete('/products/:id', utilities.verifyAuthJWT, destroy);
