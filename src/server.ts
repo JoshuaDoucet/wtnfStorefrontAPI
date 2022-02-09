@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 
 //Route functions
 import colorRoutes from './handlers/colors';
@@ -14,6 +15,7 @@ const app: express.Application = express();
 const address: string = 'localhost:3000';
 
 app.use(bodyParser.json());
+app.use(cors());
 
 app.get('/', function(req: Request, res: Response) {
   res.send('Hi! Welcome to the WTNF Storefront!');
