@@ -3,6 +3,7 @@
 // handler for images
 
 import express, { Request, Response } from 'express';
+import path from 'path'
 import { Image, ImageStore } from '../models/image';
 import utilities from '../utilities/utilities';
 
@@ -25,6 +26,24 @@ const show = async (req: Request, res: Response) => {
     const image = await store.show(req.params.id);
     if (image) {
       res.json(image);
+    } else {
+      res.status(404);
+      res.json(`Cannot GET image with id ${req.params.id}`);
+    }
+  } catch (err) {
+    res.status(503);
+    res.json(`Cannot GET image with id ${req.params.id} ERR -- ${err}`);
+  }
+};
+
+
+// /imagefile/:id [GET]
+const getImage = async (req: Request, res: Response) => {
+  try {
+    const image = await store.show(req.params.id);
+    if (image && image.path) {
+      const pathToImage = path.resolve(image.path);
+      res.sendFile(pathToImage);
     } else {
       res.status(404);
       res.json(`Cannot GET image with id ${req.params.id}`);
@@ -73,6 +92,7 @@ const destroy = async (req: Request, res: Response) => {
 const imageRoutes = (app: express.Application) => {
   app.get('/images', index);
   app.get('/images/:id', show);
+  app.get('/imagefile/:id', getImage);
   app.post('/images', utilities.verifyAuthJWT, create);
   app.delete('/images/:id', utilities.verifyAuthJWT, destroy);
 };

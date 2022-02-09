@@ -57,11 +57,19 @@ describe('Test images endpoint responses', () => {
     done();
   });
 
-  it(`show: GET /materials/:id`, async done => {
+
+  it(`show: GET /images/:id`, async done => {
     const response = await request.get(`/images/${imgID}`);
     expect(response.status).toBe(200);
     expect(response.body.name).toEqual(image.name);
     expect(response.body.path).toEqual(image.path);
+    done();
+  });
+
+  it('getImage: GET /imagefile/:id', async done => {
+    const response = await request.get(`/imagefile/${image.id}`);
+    expect(response.status).toBe(200);
+    expect(response.type).toBe('image/jpeg');
     done();
   });
 
