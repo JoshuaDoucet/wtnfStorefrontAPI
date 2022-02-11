@@ -37,7 +37,7 @@ describe('Test images endpoint responses', () => {
     user = await userStore.create(testUser);
     userId = user.id;
 
-    const response = await request.get(`/authenticate`).send({
+    const response = await request.post(`/authenticate`).send({
       email: testUser.email,
       password: testUser.password
     });

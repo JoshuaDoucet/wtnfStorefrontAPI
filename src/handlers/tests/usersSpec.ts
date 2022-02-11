@@ -54,7 +54,7 @@ describe('Test users endpoint responses', () => {
     user = await userStore.create(testUser);
     userId = user.id;
 
-    const response = await request.get(`/authenticate`).send({
+    const response = await request.post(`/authenticate`).send({
       email: testUser.email,
       password: testUser.password
     });
@@ -97,8 +97,8 @@ describe('Test users endpoint responses', () => {
     done();
   });
 
-  it(`authenticate: GET /authenticate`, async done => {
-    const response = await request.get(`/authenticate`).send({
+  it(`authenticate: POST /authenticate`, async done => {
+    const response = await request.post(`/authenticate`).send({
       email: testUser.email,
       password: testUser.password
     });

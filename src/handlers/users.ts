@@ -78,7 +78,7 @@ const destroy = async (req: Request, res: Response) => {
   }
 };
 
-// /users/authenticate
+// /users/authenticate [POST]
 const authenticate = async (req: Request, res: Response) => {
   try {
     const authUser = await store.authenticate(
@@ -99,7 +99,7 @@ const authenticate = async (req: Request, res: Response) => {
 const userRoutes = (app: express.Application) => {
   app.get('/users', utilities.verifyAuthJWT, index);
   app.get('/users/:id', utilities.verifyAuthJWT, show);
-  app.get('/authenticate', authenticate);
+  app.post('/authenticate', authenticate);
   app.post('/users', create);
   app.delete('/users/:id', utilities.verifyAuthJWT, destroy);
 };
