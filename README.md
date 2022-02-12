@@ -62,6 +62,8 @@ This repo acts as the backend to interact with the WTNF database of products, lo
    - index - the response is a list of all user rows
  - [GET] /users/:id (AUTH TOKEN)
    - show - the response is a single user that matches the specified id
+ - [GET] /users/:id/orders (AUTH TOKEN)
+   - getOrders - the response is a list of orders that belong to the user with specified id  
  - [POST] /users 
    - create - adds new user to database. When the user is added, a password hash is stored rather than the original<br>
      HTTP request body
@@ -221,6 +223,26 @@ This repo acts as the backend to interact with the WTNF database of products, lo
      ```
  - [DELETE] /colors/:id (AUTH TOKEN)
    - delete - deletes the color specified by id from the database. Response returns the color row that was deleted.
+
+#### Interacting with the image models data. 
+ - NOTE the database does not store image files. Just the name and path related to image files.
+ - [GET] /images
+   - index - the response is a list of all image rows
+ - [GET] /image/:id 
+   - show - the response is a single image that matches the specified id
+ - [GET] /imagefile/:id 
+   - show - the response is a single image file found at the path associated with the specified image id
+ - [POST] /images (AUTH TOKEN)
+   - create - adds new image to database. Response returns the created image- object <br>
+     HTTP request body
+     ```json
+     {
+         "name": "product_101",
+         "path": "/public/images/product_101.jpg"
+     }
+     ```
+ - [DELETE] /image/:id (AUTH TOKEN)
+   - delete - deletes the image row specified by id from the database. Response returns the material row being deleted.
 
 #### Interacting with the material models data. 
  - [GET] /materials
