@@ -6,6 +6,7 @@ import supertest from 'supertest';
 import app from '../../server'; // Where app is an Express server object
 import { Location, LocationStore } from '../../models/location';
 import { User, UserStore } from '../../models/user';
+import { Order, OrderStore } from '../../models/order'
 import utilities from '../../utilities/utilities';
 
 const request = supertest(app);
@@ -78,6 +79,33 @@ describe('Test users endpoint responses', () => {
     // check 2 properties of user in the response body
     expect(bodyCopy.first_name).toEqual(user.first_name);
     expect(bodyCopy.last_name).toEqual(user.last_name);
+    done();
+  });
+
+  it('getOrders: GET /users/:id/orders', async done => {
+    // create an order
+    const orderStore = new OrderStore();
+    let testOrder: Order = {
+      user_id: "-1",
+      status: "active"
+    }
+    let orderId: string | undefined;
+    if(!userId){
+      throw new Error ("User id must be defined to create order")
+    }
+
+    testOrder.user_id = userId;
+    const order = await orderStore.create(testOrder);
+    
+    const response = await request
+      .get(`/users/${userId}/orders`)
+      .set('Authorization', userJWT);
+    // create a copy of response body to change null values to undefined
+    const bodyCopy = utilities.objectNullValsToUndefined(response.body) as Order[];
+    // Check for valid status code
+    expect(response.status).toBe(200);
+    // check if order list has a length of 1
+    expect(bodyCopy.length).toEqual(1);
     done();
   });
 

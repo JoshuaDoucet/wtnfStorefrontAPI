@@ -6,6 +6,8 @@ import Client from '../database';
 // for password hashing
 import bcrypt from 'bcrypt';
 
+import { Order } from './order';
+
 export type User = {
   id?: string;
   first_name: string;
@@ -44,6 +46,19 @@ export class UserStore {
       return result.rows[0]; //should be 1 user returned
     } catch (err) {
       throw new Error(`Could not get user. ERR ${err}`);
+    }
+  }
+
+  // READ get all orders with given userId
+  async getOrders(userId: string): Promise<Order[]> {
+    try {
+      const connect = await Client.connect();
+      const sql = 'SELECT * FROM orders WHERE user_id=($1)';
+      const result = await connect.query(sql, [userId]);
+      connect.release();
+      return result.rows; 
+    } catch (err) {
+      throw new Error(`Could not get orders for user. ERR ${err}`);
     }
   }
 

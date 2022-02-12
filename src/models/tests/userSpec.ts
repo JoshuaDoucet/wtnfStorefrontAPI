@@ -6,6 +6,7 @@ import { LocationStore, Location } from '../location';
 import { UserStore, User } from '../user';
 import utilities from '../../utilities/utilities';
 import bcrypt from 'bcrypt';
+import { Order, OrderStore } from '../order';
 
 describe('User model tests', () => {
   const userStore = new UserStore();
@@ -25,6 +26,8 @@ describe('User model tests', () => {
     zip: 80922
   };
   let locationId: string | undefined;
+
+
 
   beforeAll(async function() {
     await locationStore.deleteAll();
@@ -112,5 +115,25 @@ describe('User model tests', () => {
   it('deleteAll should return a value that is defined', async () => {
     const result = await userStore.deleteAll();
     expect(result).toBeDefined();
+  });
+
+  // Tests for veiwing user orders
+  it('getOrders should return a list with 1 order', async () =>{
+    const orderStore = new OrderStore();
+    let testOrder: Order = {
+      user_id: "-1",
+      status: "active"
+    }
+    let orderId: string | undefined;
+    if(userId){
+      testOrder.user_id = userId;
+      // create an order
+      const addedOrder = await orderStore.create(testOrder);
+      // see if getOrders returns an order
+      const orders = await userStore.getOrders(userId);
+      expect(orders.length).toEqual(1);
+    }else{
+      throw new Error("User Id must be defined to create an order.");
+    }
   });
 });

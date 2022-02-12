@@ -77,6 +77,21 @@ const destroy = async (req: Request, res: Response) => {
     res.json(`User id [${req.params.id}] not deleted. ERR -- ${err}`);
   }
 };
+// /users/:id/orders [GET]
+const getOrders = async (req: Request, res: Response) => {
+  try {
+    const orders = await store.getOrders(req.params.id);
+    if (orders) {
+      res.json(orders);
+    } else {
+      res.status(404);
+      res.json(`Cannot GET orders for user with id ${req.params.id}`);
+    }
+  } catch (err) {
+    res.status(503);
+    res.json(`Cannot GET user with id ${req.params.id} ERR -- ${err}`);
+  }
+}
 
 // /users/authenticate [POST]
 const authenticate = async (req: Request, res: Response) => {
@@ -99,6 +114,7 @@ const authenticate = async (req: Request, res: Response) => {
 const userRoutes = (app: express.Application) => {
   app.get('/users', utilities.verifyAuthJWT, index);
   app.get('/users/:id', utilities.verifyAuthJWT, show);
+  app.get('/users/:id/orders', utilities.verifyAuthJWT, getOrders)
   app.post('/authenticate', authenticate);
   app.post('/users', create);
   app.delete('/users/:id', utilities.verifyAuthJWT, destroy);
