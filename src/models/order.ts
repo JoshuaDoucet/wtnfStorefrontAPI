@@ -113,8 +113,9 @@ export class OrderStore {
   async getProducts(orderId: string): Promise<string[]> {
     try {
       const sql =
-        'SELECT products.id, products.name, product_quantity FROM products ' +
-        'INNER JOIN order_products ON order_products.order_id=($1) ';
+        'SELECT products.id, products.name, order_products.product_quantity FROM products ' +
+        'INNER JOIN order_products ON order_products.order_id=($1) ' +
+        'AND order_products.product_id = products.id';
       const conn = await Client.connect();
       const result = await conn.query(sql, [orderId]);
       const productsInOrder = result.rows;
@@ -148,6 +149,33 @@ export class OrderStore {
       );
     }
   }
+
+    // updateProdQuantity in order
+    async updateProdQuantity(
+      productId: string,
+      orderId: string,
+      quantity: number
+    ): Promise<object> {
+      try {
+        const sql =
+          'UPDATE order_products ' +
+          `SET product_quantity = ($3) ` +
+          'WHERE order_id = (SELECT id FROM orders WHERE id = ($2))' +
+          'AND product_id = (SELECT id FROM products WHERE id = ($1)) RETURNING *';
+        const conn = await Client.connect();
+        const result = await conn.query(sql, 
+          [productId, 
+            orderId, 
+            quantity]);
+        const updatedItem = result.rows[0];
+        conn.release();
+        return updatedItem;
+      } catch (err) {
+        throw new Error(
+          `Could not update quantity for product ${productId} to order ${orderId} ERR -- ${err}`
+        );
+      }
+    }
 
   // removeProducts from order, removes all products from an order
   async removeProducts(orderId: string): Promise<Order[]> {

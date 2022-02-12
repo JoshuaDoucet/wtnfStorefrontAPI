@@ -103,6 +103,20 @@ const addProduct = async (_req: Request, res: Response) => {
   }
 };
 
+// /orders/:id/products/:prodId [PUT]
+const updateProdQuantity  = async (_req: Request, res: Response) => {
+  const orderId: string = _req.params.id;
+  const productId: string = _req.params.prodId;
+  const quantity: number = _req.body.product_quantity;
+  try {
+    const updatedOrderProduct = await store.updateProdQuantity(productId, orderId, quantity);
+    res.json(updatedOrderProduct);
+  } catch (err) {
+    res.status(400);
+    res.json('Cannot update product in order. ERR -- ' + err);
+  }
+};
+
 // /orders/:id [DELETE]
 const destroy = async (req: Request, res: Response) => {
   try {
@@ -125,6 +139,7 @@ const orderRoutes = (app: express.Application) => {
   app.get('/orders', utilities.verifyAuthJWT, index);
   app.get('/orders/:id', utilities.verifyAuthJWT, show);
   app.get('/orders/:id/products', utilities.verifyAuthJWT, getProducts);
+  app.put('/orders/:id/products/:prodId', utilities.verifyAuthJWT, updateProdQuantity )
   app.post('/orders', utilities.verifyAuthJWT, create);
   app.post('/orders/:id/products', utilities.verifyAuthJWT, addProduct);
   app.delete('/orders/:id', utilities.verifyAuthJWT, destroy);
