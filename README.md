@@ -62,6 +62,8 @@ This repo acts as the backend to interact with the WTNF database of products, lo
    - index - the response is a list of all user rows
  - [GET] /users/:id (AUTH TOKEN)
    - show - the response is a single user that matches the specified id
+ - [GET] /users/:id/orders (AUTH TOKEN)
+   - getOrders - the response is a list of orders that belong to the user with specified id  
  - [POST] /users 
    - create - adds new user to database. When the user is added, a password hash is stored rather than the original<br>
      HTTP request body
