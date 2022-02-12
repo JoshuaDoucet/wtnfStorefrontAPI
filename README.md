@@ -131,6 +131,16 @@ This repo acts as the backend to interact with the WTNF database of products, lo
           "product_quantity": 33
       }
      ```
+ - [PUT] /orders/:id/products/:prodId (AUTH TOKEN)
+   - updateProdQuantity - updates product quantity in order <br>
+     HTTP request body
+     ```json
+      {
+          "product_quantity": 33
+      }
+     ```
+ - [DELETE] /orders/:id/products/:prodId (AUTH TOKEN)
+   - deleteProduct - deletes product from order <br>
  - [DELETE] /orders/:id (AUTH TOKEN)
    - delete - deletes the order specified by id from the database. Response returns the order row being deleted.
 
