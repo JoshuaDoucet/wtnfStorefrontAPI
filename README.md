@@ -222,6 +222,26 @@ This repo acts as the backend to interact with the WTNF database of products, lo
  - [DELETE] /colors/:id (AUTH TOKEN)
    - delete - deletes the color specified by id from the database. Response returns the color row that was deleted.
 
+#### Interacting with the image models data. 
+ - NOTE the database does not store image files. Just the name and path related to image files.
+ - [GET] /images
+   - index - the response is a list of all image rows
+ - [GET] /image/:id 
+   - show - the response is a single image that matches the specified id
+ - [GET] /imagefile/:id 
+   - show - the response is a single image file found at the path associated with the specified image id
+ - [POST] /images (AUTH TOKEN)
+   - create - adds new image to database. Response returns the created image- object <br>
+     HTTP request body
+     ```json
+     {
+         "name": "product_101",
+         "path": "/public/images/product_101.jpg"
+     }
+     ```
+ - [DELETE] /image/:id (AUTH TOKEN)
+   - delete - deletes the image row specified by id from the database. Response returns the material row being deleted.
+
 #### Interacting with the material models data. 
  - [GET] /materials
    - index - the response is a list of all material rows
