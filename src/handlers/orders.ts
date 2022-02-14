@@ -103,6 +103,19 @@ const addProduct = async (_req: Request, res: Response) => {
   }
 };
 
+// /orders/:id/products/:prodId DELETE
+const removeProduct = async (_req: Request, res: Response) => {
+  const orderId: string = _req.params.id;
+  const productId: string = _req.params.prodId;
+  try {
+    const removedProduct = await store.removeProduct(productId, orderId);
+    res.json(removedProduct);
+  } catch (err) {
+    res.status(400);
+    res.json('Cannot remove product from order. ERR -- ' + err);
+  }
+};
+
 // /orders/:id/products/:prodId [PUT]
 const updateProdQuantity  = async (_req: Request, res: Response) => {
   const orderId: string = _req.params.id;
@@ -143,6 +156,7 @@ const orderRoutes = (app: express.Application) => {
   app.post('/orders', utilities.verifyAuthJWT, create);
   app.post('/orders/:id/products', utilities.verifyAuthJWT, addProduct);
   app.delete('/orders/:id', utilities.verifyAuthJWT, destroy);
+  app.delete('/orders/:id/products/:prodId', utilities.verifyAuthJWT, removeProduct )
 };
 
 export default orderRoutes;

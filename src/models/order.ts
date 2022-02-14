@@ -177,6 +177,23 @@ export class OrderStore {
       }
     }
 
+    // removeProducts from order, removes all products from an order
+    async removeProduct(productId: string, orderId: string): Promise<object[]> {
+      try {
+        const sql = 'DELETE FROM order_products WHERE order_id=($1) AND product_id=($2) RETURNING *';
+        const connect = await Client.connect();
+        const result = await connect.query(sql, [orderId, productId]);
+        const delProduct = result.rows[0];
+        connect.release();
+        return delProduct;
+      } catch (err) {
+        throw new Error(
+          `Could not delete product with ID ${productId} from order ID ${orderId}. Error: ${err}`
+        );
+      }
+    }
+
+
   // removeProducts from order, removes all products from an order
   async removeProducts(orderId: string): Promise<Order[]> {
     try {
