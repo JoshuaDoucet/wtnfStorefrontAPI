@@ -86,7 +86,7 @@ export class OrderStore {
   async cart(userId: string): Promise<object> {
     try {
       const sql =
-        'SELECT order_products.id AS id, products.id AS product_id, products.name, products.price, order_products.product_quantity, ' +
+        'SELECT order_products.id AS id, products.id AS product_id, products.name, products.price, products.boh, order_products.product_quantity, ' +
         'orders.user_id, orders.id AS ord_id, orders.status ' +
         'FROM products INNER JOIN order_products ' +
         'ON order_products.product_id = products.id ' +
