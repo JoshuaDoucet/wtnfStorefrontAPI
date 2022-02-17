@@ -77,6 +77,19 @@ const create = async (req: Request, res: Response) => {
   }
 };
 
+// /orders/:id [PUT]
+const update  = async (_req: Request, res: Response) => {
+  const orderId: string = _req.params.id;
+  const status: string = _req.body.status;
+  try {
+    const updatedOrder = await store.update(orderId, status);
+    res.json(updatedOrder);
+  } catch (err) {
+    res.status(400);
+    res.json('Cannot update order status. ERR -- ' + err);
+  }
+};
+
 // /orders/:id/products GET
 const getProducts = async (_req: Request, res: Response) => {
   const orderId: string = _req.params.id;
@@ -152,9 +165,13 @@ const orderRoutes = (app: express.Application) => {
   app.get('/orders', utilities.verifyAuthJWT, index);
   app.get('/orders/:id', utilities.verifyAuthJWT, show);
   app.get('/orders/:id/products', utilities.verifyAuthJWT, getProducts);
+  
+  app.put('/orders/:id', utilities.verifyAuthJWT, update);
   app.put('/orders/:id/products/:prodId', utilities.verifyAuthJWT, updateProdQuantity )
+  
   app.post('/orders', utilities.verifyAuthJWT, create);
   app.post('/orders/:id/products', utilities.verifyAuthJWT, addProduct);
+  
   app.delete('/orders/:id', utilities.verifyAuthJWT, destroy);
   app.delete('/orders/:id/products/:prodId', utilities.verifyAuthJWT, removeProduct )
 };

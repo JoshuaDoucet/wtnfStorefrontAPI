@@ -54,6 +54,32 @@ export class OrderStore {
     }
   }
 
+
+  // update order status
+  async update(
+    orderId: string,
+    status: string
+  ): Promise<Order> {
+    try {
+      const sql =
+        'UPDATE orders ' +
+        `SET status = ($2) ` +
+        'WHERE id = ($1)' +
+        'RETURNING *';
+      const conn = await Client.connect();
+      const result = await conn.query(sql, 
+        [ orderId, 
+          status]);
+      const updatedItem = result.rows[0];
+      conn.release();
+      return updatedItem;
+    } catch (err) {
+      throw new Error(
+        `Could not update status for order ${orderId} ERR -- ${err}`
+      );
+    }
+  }
+  
   // DELETE an order row
   async delete(id: string): Promise<Order> {
     try {
