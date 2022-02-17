@@ -6,11 +6,7 @@ CREATE TABLE order_products (
 );
 
 INSERT INTO order_products (product_id, order_id, product_quantity)
-    VALUES ( (SELECT id FROM products WHERE name='Leather Bag Red'), 
-             (SELECT id FROM orders WHERE id='1' ), 3 ),
-           ( (SELECT id FROM products WHERE name='Silk Green/Blue Shirt'), 
-             (SELECT id FROM orders WHERE id='1' ), 4 ),
-           ( (SELECT id FROM products WHERE name='Baseball Cap'), 
+    VALUES ( (SELECT id FROM products WHERE name='Baseball Cap'), 
              (SELECT id FROM orders WHERE id='2' ), 1 ),
            ( (SELECT id FROM products WHERE name='Winter gloves'), 
              (SELECT id FROM orders WHERE id='2' ), 7 ),
