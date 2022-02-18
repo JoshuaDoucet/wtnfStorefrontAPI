@@ -106,7 +106,7 @@ This repo acts as the backend to interact with the WTNF database of products, lo
         }
       }
      ```
-  - [PUT] /users/id
+  - [PUT] /users/:id (AUTH TOKEN)
    - update - updates a user in the database. All columns of user can be updated using this endpoint except their password_hash
      ```json
       {
