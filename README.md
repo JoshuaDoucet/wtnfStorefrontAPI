@@ -136,7 +136,7 @@ This repo acts as the backend to interact with the WTNF database of products, lo
       HTTP request body
       ```json
        {
-           "status: "complete"
+           "status": "complete"
        }
       ```
  - [PUT] /orders/:id/products/:prodId (AUTH TOKEN)
