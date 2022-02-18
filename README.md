@@ -106,6 +106,17 @@ This repo acts as the backend to interact with the WTNF database of products, lo
         }
       }
      ```
+  - [PUT] /users/id
+   - update - updates a user in the database. All columns of user can be updated using this endpoint except their password_hash
+     ```json
+      {
+          "first_name": "Jane",
+          "last_name": "Doe",
+          "phone": 7195550101,
+          "email": "janedoe@outlook.com",
+          "location_id": "2"
+      }
+     ```
  - [DELETE] /users/:id (AUTH TOKEN)
    - delete - deletes the user specified by id from the database. Response returns the user row that was deleted.
    
