@@ -99,6 +99,36 @@ export class UserStore {
     }
   }
 
+// UPDATE a user row, but not their password
+async update(user: User): Promise<User> {
+  try {
+    const sql =
+      'UPDATE users ' +
+      'SET first_name = ($1), ' +
+        'last_name = ($2), ' +
+        'phone = ($3), ' +
+        'email = ($4), ' +
+        'location_id = (SELECT id FROM locations WHERE id=($5)) ' +
+      'WHERE id = ($6) RETURNING *';
+
+    const connect = await Client.connect();
+    const result = await connect.query(sql, [
+      user.first_name,
+      user.last_name,
+      user.phone,
+      user.email,
+      user.location_id,
+      user.id
+    ]);
+    const updatedUser = result.rows[0];
+    connect.release();
+    return updatedUser;
+  } catch (error) {
+    throw new Error(`Could not update user ${user.email}. Error: ${error}`);
+  }
+}
+
+
   // DELETE a user row
   async delete(id: string): Promise<User> {
     try {

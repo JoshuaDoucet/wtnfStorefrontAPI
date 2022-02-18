@@ -41,7 +41,7 @@ const create = async (req: Request, res: Response) => {
   let userName: string | undefined;
   try {
     // Pull value for error handling
-    userName = req.body.name;
+    userName = req.body.email;
     const user: User = {
       first_name: req.body.first_name,
       last_name: req.body.last_name,
@@ -59,6 +59,28 @@ const create = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(400);
     res.json(`User name [${userName}] not added. ERR -- ${error}`);
+  }
+};
+
+// /users/:id [PUT]
+const update = async (req: Request, res: Response) => {
+  let userName: string | undefined;
+  try {
+    // Pull value for error handling
+    userName = req.body.email;
+    const user: User = {
+      id: req.params.id,
+      first_name: req.body.first_name,
+      last_name: req.body.last_name,
+      phone: req.body.phone,
+      email: req.body.email,
+      location_id: req.body.location_id
+    };
+    const updatedUser = await store.update(user);
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(400);
+    res.json(`User name [${userName}] not updated. ERR -- ${error}`);
   }
 };
 
@@ -117,6 +139,7 @@ const userRoutes = (app: express.Application) => {
   app.get('/users/:id/orders', utilities.verifyAuthJWT, getOrders)
   app.post('/authenticate', authenticate);
   app.post('/users', create);
+  app.put('/users/:id', update);
   app.delete('/users/:id', utilities.verifyAuthJWT, destroy);
 };
 
