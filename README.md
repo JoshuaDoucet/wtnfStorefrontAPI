@@ -131,6 +131,14 @@ This repo acts as the backend to interact with the WTNF database of products, lo
           "product_quantity": 33
       }
      ```
+  - [PUT] /orders/:id (AUTH TOKEN)
+    - update - updates the status of the order with specified id <br>
+      HTTP request body
+      ```json
+       {
+           "status: "complete"
+       }
+      ```
  - [PUT] /orders/:id/products/:prodId (AUTH TOKEN)
    - updateProdQuantity - updates product quantity in order <br>
      HTTP request body
