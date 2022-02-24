@@ -1,3 +1,5 @@
+### THIS REPO IS NO LONGER MAINTAINED. SEE ITS NEW HOME https://github.com/JoshuaDoucet/wtnfStorefront
+
 # Wandering Threads Nesting Feathers (WTNF) Storefront Backend API
 
 ## About 
